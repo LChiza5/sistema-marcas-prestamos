@@ -1,0 +1,21 @@
+{
+  "name": "sistema-marcas-prestamos-backend",
+  "version": "1.0.0",
+  "description": "API REST del Sistema de Marcas y Préstamo de Equipos",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-mysql-session": "^3.0.3",
+    "express-session": "^1.18.2",
+    "mysql2": "^3.15.4"
+  }
+}

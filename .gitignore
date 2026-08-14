@@ -10,8 +10,11 @@ dist/
 build/
 
 # Archivos subidos por los usuarios
-backend/uploads/**
-!backend/uploads/**/.gitkeep
+# Se ignora el contenido, pero se conserva la carpeta con su .gitkeep
+backend/uploads/*
+!backend/uploads/equipos/
+backend/uploads/equipos/*
+!backend/uploads/equipos/.gitkeep
 
 # Logs
 *.log
