@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { requiereSesion } from '../../middlewares/auth.middleware.js';
+import * as controlador from './usuarios.controller.js';
 
 const router = Router();
 
@@ -24,5 +26,37 @@ const router = Router();
 // Crear también: usuarios.controller.js, usuarios.model.js y
 // usuarios.validaciones.js, siguiendo el módulo auth como ejemplo.
 // =====================================================================
+
+// Punto 4 — Perfil
+router.get(
+  '/perfil',
+  requiereSesion,
+  controlador.obtenerPerfil
+);
+
+router.put(
+  '/perfil',
+  requiereSesion,
+  controlador.actualizarPerfil
+);
+
+// Punto 5 — Cambio de contraseña
+router.put(
+  '/password',
+  requiereSesion,
+  controlador.cambiarPassword
+);
+
+// Punto 6 — Recuperación de contraseña
+router.post(
+  '/recuperar',
+  controlador.solicitarRecuperacion
+);
+
+router.post(
+  '/restablecer',
+  controlador.restablecerPassword
+);
+
 
 export default router;
