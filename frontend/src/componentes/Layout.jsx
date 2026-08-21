@@ -2,7 +2,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
 export default function Layout() {
-  const { usuario, logout } = useAuth();
+  const { usuario, logout, esAdministrador } = useAuth();
   const navegar = useNavigate();
 
   async function cerrarSesion() {
@@ -18,6 +18,21 @@ export default function Layout() {
             <i className="bi bi-clipboard-check me-2"></i>
             Marcas y Préstamos
           </Link>
+
+          <div className="navbar-nav me-auto">
+            {esAdministrador && (
+              <>
+                <Link className="nav-link text-white" to="/equipos">
+                  <i className="bi bi-box-seam me-1"></i>
+                  Equipos
+                </Link>
+                <Link className="nav-link text-white" to="/prestamos">
+                  <i className="bi bi-clipboard-check me-1"></i>
+                  Préstamos
+                </Link>
+              </>
+            )}
+          </div>
 
           {/* TODO: agregar aquí los enlaces de cada módulo conforme se completen. */}
 

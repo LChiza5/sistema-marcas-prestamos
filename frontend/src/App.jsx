@@ -5,6 +5,8 @@ import RutaProtegida from './componentes/RutaProtegida.jsx';
 import Login from './paginas/Login.jsx';
 import Registro from './paginas/Registro.jsx';
 import Inicio from './paginas/Inicio.jsx';
+import Equipos from './paginas/Equipos.jsx';
+import Prestamos from './paginas/Prestamos.jsx';
 
 export default function App() {
   return (
@@ -22,6 +24,24 @@ export default function App() {
         }
       >
         <Route path="/" element={<Inicio />} />
+
+        <Route
+          path="/equipos"
+          element={
+            <RutaProtegida soloAdministrador>
+              <Equipos />
+            </RutaProtegida>
+          }
+        />
+
+        <Route
+          path="/prestamos"
+          element={
+            <RutaProtegida soloAdministrador>
+              <Prestamos />
+            </RutaProtegida>
+          }
+        />
 
         {/* TODO: agregar aquí las páginas de cada módulo.
             Ejemplo:
