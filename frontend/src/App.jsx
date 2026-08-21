@@ -7,6 +7,7 @@ import Registro from './paginas/Registro.jsx';
 import Inicio from './paginas/Inicio.jsx';
 import Equipos from './paginas/Equipos.jsx';
 import Prestamos from './paginas/Prestamos.jsx';
+import Reportes from './paginas/Reportes.jsx';
 
 export default function App() {
   return (
@@ -39,6 +40,15 @@ export default function App() {
           element={
             <RutaProtegida soloAdministrador>
               <Prestamos />
+            </RutaProtegida>
+          }
+        />
+
+        <Route
+          path="/reportes"
+          element={
+            <RutaProtegida soloAdministrador>
+              <Reportes />
             </RutaProtegida>
           }
         />

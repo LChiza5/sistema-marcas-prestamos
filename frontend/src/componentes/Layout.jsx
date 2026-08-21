@@ -30,6 +30,10 @@ export default function Layout() {
                   <i className="bi bi-clipboard-check me-1"></i>
                   Préstamos
                 </Link>
+                <Link className="nav-link text-white" to="/reportes">
+                  <i className="bi bi-file-earmark-text me-1"></i>
+                  Reportes
+                </Link>
               </>
             )}
           </div>
