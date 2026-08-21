@@ -89,3 +89,52 @@ export async function obtenerPorId(req, res, next) {
     next(err);
   }
 }
+
+/** Punto 19 — Devolución individual de un equipo. */
+export async function devolverEquipo(req, res, next) {
+  try {
+    const id = Number(req.params.id);
+    const idEquipo = Number(req.params.idEquipo);
+
+    if (!Number.isInteger(id) || !Number.isInteger(idEquipo)) {
+      return error(res, 'Los identificadores indicados no son válidos', 400);
+    }
+
+    const resultado = await modelo.devolverEquipoIndividual(id, idEquipo);
+    if (resultado.error) return error(res, resultado.error, 400);
+
+    const prestamoActualizado = await modelo.buscarConDetalle(id);
+    return exito(res, prestamoActualizado, 'Equipo devuelto correctamente');
+  } catch (err) {
+    next(err);
+  }
+}
+
+/** Punto 19 — Devolución completa de todos los equipos pendientes de un préstamo. */
+export async function devolverCompleto(req, res, next) {
+  try {
+    const id = Number(req.params.id);
+
+    if (!Number.isInteger(id)) {
+      return error(res, 'El identificador del préstamo no es válido', 400);
+    }
+
+    const resultado = await modelo.devolverPrestamoCompleto(id);
+    if (resultado.error) return error(res, resultado.error, 400);
+
+    const prestamoActualizado = await modelo.buscarConDetalle(id);
+    return exito(res, prestamoActualizado, 'Préstamo devuelto por completo');
+  } catch (err) {
+    next(err);
+  }
+}
+
+/** Punto 20 — Historial de préstamos con filtros. */
+export async function listarHistorial(req, res, next) {
+  try {
+    const historial = await modelo.obtenerHistorial(req.query);
+    return exito(res, historial, 'Historial de préstamos obtenido');
+  } catch (err) {
+    next(err);
+  }
+}
