@@ -21,10 +21,16 @@ export default function Layout() {
 
           <div className="navbar-nav me-auto">
             {esAdministrador && (
-              <Link className="nav-link text-white" to="/equipos">
-                <i className="bi bi-box-seam me-1"></i>
-                Equipos
-              </Link>
+              <>
+                <Link className="nav-link text-white" to="/equipos">
+                  <i className="bi bi-box-seam me-1"></i>
+                  Equipos
+                </Link>
+                <Link className="nav-link text-white" to="/prestamos">
+                  <i className="bi bi-clipboard-check me-1"></i>
+                  Préstamos
+                </Link>
+              </>
             )}
           </div>
 
