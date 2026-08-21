@@ -76,3 +76,11 @@ export async function obtenerMarcas(filtros) {
 
   return filas;
 }
+
+/** Obtiene los usuarios del sistema para el selector del reporte. */
+export async function obtenerUsuarios() {
+  const [filas] = await pool.query(
+    'SELECT id, nombre_completo, usuario FROM usuarios WHERE activo = 1 ORDER BY nombre_completo ASC'
+  );
+  return filas;
+}

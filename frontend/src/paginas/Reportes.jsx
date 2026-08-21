@@ -4,6 +4,7 @@ import { api, API_URL } from '../api/cliente.js';
 export default function Reportes() {
   const [marcas, setMarcas] = useState([]);
   const [departamentos, setDepartamentos] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
 
@@ -17,6 +18,7 @@ export default function Reportes() {
 
   useEffect(() => {
     cargarDepartamentos();
+    cargarUsuarios();
     cargarMarcas();
   }, []);
 
@@ -25,6 +27,13 @@ export default function Reportes() {
       .get('/departamentos')
       .then((res) => setDepartamentos(res.datos || []))
       .catch(() => setDepartamentos([]));
+  }
+
+  function cargarUsuarios() {
+    api
+      .get('/reportes/usuarios')
+      .then((res) => setUsuarios(res.datos || []))
+      .catch(() => setUsuarios([]));
   }
 
   function cargarMarcas(filtrosAplicar = filtros) {
@@ -122,15 +131,20 @@ export default function Reportes() {
         <div className="card-body">
           <form onSubmit={handleBuscar} className="row g-3 align-items-end">
             <div className="col-md-3">
-              <label className="form-label small fw-bold">ID / Usuario</label>
-              <input
-                type="text"
-                className="form-control form-control-sm"
+              <label className="form-label small fw-bold">Usuario</label>
+              <select
+                className="form-select form-select-sm"
                 name="usuario"
                 value={filtros.usuario}
                 onChange={handleCambioFiltro}
-                placeholder="ID de usuario"
-              />
+              >
+                <option value="">Todos los usuarios</option>
+                {usuarios.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.nombre_completo} ({u.usuario})
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="col-md-2">
               <label className="form-label small fw-bold">Año</label>

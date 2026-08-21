@@ -8,7 +8,7 @@ export function validarFiltros(query) {
   const errores = [];
   const { usuario, anio, mes, dia, departamento } = query;
 
-  if (usuario !== undefined && !Number.isInteger(Number(usuario))) {
+  if (usuario !== undefined && usuario !== '' && !Number.isInteger(Number(usuario))) {
     errores.push('El filtro de usuario no es válido');
   }
   if (departamento !== undefined && !Number.isInteger(Number(departamento))) {

@@ -57,3 +57,13 @@ export async function exportarMarcas(req, res, next) {
     next(err);
   }
 }
+
+/** Obtiene la lista de usuarios para el selector de reportes. */
+export async function listarUsuarios(req, res, next) {
+  try {
+    const usuarios = await modelo.obtenerUsuarios();
+    return exito(res, usuarios, 'Usuarios del reporte obtenidos');
+  } catch (err) {
+    next(err);
+  }
+}
