@@ -20,6 +20,16 @@ export default function Layout() {
           </Link>
 
           <div className="navbar-nav me-auto">
+            <Link className="nav-link text-white" to="/perfil">
+              <i className="bi bi-person me-1"></i>
+              Mi perfil
+            </Link>
+          
+            <Link className="nav-link text-white" to="/cambiar-contrasena">
+              <i className="bi bi-key me-1"></i>
+              Contraseña
+            </Link>
+
             {esAdministrador && (
               <>
                 <Link className="nav-link text-white" to="/equipos">
@@ -33,6 +43,10 @@ export default function Layout() {
                 <Link className="nav-link text-white" to="/reportes">
                   <i className="bi bi-file-earmark-text me-1"></i>
                   Reportes
+                </Link>
+                <Link className="nav-link text-white" to="/departamentos">
+                  <i className="bi bi-building me-1"></i>
+                  Departamentos
                 </Link>
               </>
             )}

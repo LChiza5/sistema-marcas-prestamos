@@ -188,7 +188,7 @@ export async function solicitarRecuperacion(req, res, next) {
     return exito(
       res,
       { enlace },
-      'Token de recuperación generado correctamente'
+      ''
     );
   } catch (err) {
     next(err);

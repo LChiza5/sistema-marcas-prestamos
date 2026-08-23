@@ -71,6 +71,11 @@ export default function Login() {
       </p>
 
       {/* TODO (punto 6): agregar el enlace de recuperación de contraseña. */}
+
+      <p className="text-center mt-3 mb-0 small">
+              <Link to="/recuperar-contrasena">¿Olvidó su contraseña?</Link>
+      </p>
+
     </div>
   );
 }
