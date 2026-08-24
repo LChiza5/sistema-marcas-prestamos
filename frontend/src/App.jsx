@@ -8,6 +8,11 @@ import Inicio from './paginas/Inicio.jsx';
 import Equipos from './paginas/Equipos.jsx';
 import Prestamos from './paginas/Prestamos.jsx';
 import Reportes from './paginas/Reportes.jsx';
+import Perfil from './paginas/Perfil.jsx';
+import CambiarContrasena from './paginas/CambiarContrasena.jsx';
+import RecuperarContrasena from './paginas/RecuperarContrasena.jsx';
+import RestablecerContrasena from './paginas/RestablecerContrasena.jsx';
+import Departamentos from './paginas/Departamentos.jsx';
 
 export default function App() {
   return (
@@ -15,6 +20,8 @@ export default function App() {
       {/* Páginas públicas */}
       <Route path="/login" element={<Login />} />
       <Route path="/registro" element={<Registro />} />
+      <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
+      <Route path="/restablecer-contrasena" element={<RestablecerContrasena />} />
 
       {/* Páginas que requieren sesión activa */}
       <Route
@@ -25,6 +32,9 @@ export default function App() {
         }
       >
         <Route path="/" element={<Inicio />} />
+        <Route path="/perfil" element={<Perfil />} />
+        <Route path="/cambiar-contrasena" element={<CambiarContrasena />} />
+        
 
         <Route
           path="/equipos"
@@ -52,7 +62,16 @@ export default function App() {
             </RutaProtegida>
           }
         />
-
+        
+        <Route
+          path="/departamentos"
+          element={
+            <RutaProtegida soloAdministrador>
+              <Departamentos />
+            </RutaProtegida>
+          }
+        />
+        
         {/* TODO: agregar aquí las páginas de cada módulo.
             Ejemplo:
             <Route path="/perfil" element={<Perfil />} />
