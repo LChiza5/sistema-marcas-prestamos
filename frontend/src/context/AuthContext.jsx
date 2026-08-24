@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
     setUsuario(null);
   }
 
-  const valor = { usuario, cargando, login, logout, esAdministrador: usuario?.rol === 'ADMINISTRADOR' };
+  const valor = { usuario, cargando, login, logout, actualizarUsuario, esAdministrador: usuario?.rol === 'ADMINISTRADOR' };
 
   return <AuthContext.Provider value={valor}>{children}</AuthContext.Provider>;
 }
@@ -35,3 +35,10 @@ export function AuthProvider({ children }) {
 export function useAuth() {
   return useContext(AuthContext);
 }
+
+export function actualizarUsuario(cambios) {
+  setUsuario((actual) => (
+    actual ? { ...actual, ...cambios } : actual
+  ));
+}
+
