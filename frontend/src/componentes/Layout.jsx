@@ -30,6 +30,16 @@ export default function Layout() {
               Contraseña
             </Link>
 
+            <Link className="nav-link text-white" to="/marcas">
+              <i className="bi bi-clock-history me-1"></i>
+              Marcas
+            </Link>
+
+            <Link className="nav-link text-white" to="/dispositivos">
+              <i className="bi bi-phone me-1"></i>
+              Dispositivos
+            </Link>
+
             {esAdministrador && (
               <>
                 <Link className="nav-link text-white" to="/equipos">
@@ -51,8 +61,6 @@ export default function Layout() {
               </>
             )}
           </div>
-
-          {/* TODO: agregar aquí los enlaces de cada módulo conforme se completen. */}
 
           <div className="d-flex align-items-center gap-3">
             <span className="text-white small">

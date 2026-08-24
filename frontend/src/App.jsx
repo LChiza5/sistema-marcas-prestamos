@@ -13,6 +13,8 @@ import CambiarContrasena from './paginas/CambiarContrasena.jsx';
 import RecuperarContrasena from './paginas/RecuperarContrasena.jsx';
 import RestablecerContrasena from './paginas/RestablecerContrasena.jsx';
 import Departamentos from './paginas/Departamentos.jsx';
+import Marcas from './paginas/Marcas.jsx';
+import Dispositivos from './paginas/Dispositivos.jsx';
 
 export default function App() {
   return (
@@ -34,6 +36,8 @@ export default function App() {
         <Route path="/" element={<Inicio />} />
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/cambiar-contrasena" element={<CambiarContrasena />} />
+        <Route path="/marcas" element={<Marcas />} />
+        <Route path="/dispositivos" element={<Dispositivos />} />
         
 
         <Route
@@ -72,12 +76,6 @@ export default function App() {
           }
         />
         
-        {/* TODO: agregar aquí las páginas de cada módulo.
-            Ejemplo:
-            <Route path="/perfil" element={<Perfil />} />
-            <Route path="/marcas" element={<Marcas />} />
-            Para las páginas del administrador, envolver con:
-            <RutaProtegida soloAdministrador>…</RutaProtegida> */}
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
