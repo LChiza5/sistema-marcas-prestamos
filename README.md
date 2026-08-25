@@ -129,12 +129,6 @@ npm run dev
 
 Interfaz disponible en `http://localhost:5173`
 
-### Usuario administrador inicial
-
-| Usuario | Contraseña  |
-| ------- | ----------- |
-| `admin` | `Admin123!` |
-
 ---
 
 ## Estado actual del proyecto
@@ -151,20 +145,6 @@ Interfaz disponible en `http://localhost:5173`
 
 **Pendiente:** los puntos 4 al 20, repartidos según la tabla de abajo. Las carpetas de cada módulo
 ya existen con su archivo de rutas listo para completar.
-
----
-
-## Repartición del trabajo
-
-| Integrante    | Puntos asignados     | Responsabilidad                                                                     |
-| ------------- | -------------------- | ----------------------------------------------------------------------------------- |
-| **Luis**      | Base + 1, 2, 3       | Estructura, Docker, `init.sql`, sesiones, middlewares. Registro, login y logout.     |
-| **Sander**    | 4, 5, 6, 7           | Perfil de usuario, cambio de contraseña, recuperación de contraseña, departamentos.  |
-| **Jorge**     | 8, 9, 10 + Config.   | Registro de marcas, dispositivos autorizados, validación de IP, módulo config.       |
-| **Dubán**     | 11, 12, 13 + 19, 20  | Reporte de marcas, filtros, exportación. Devolución de equipos e historial.          |
-| **Sebastián** | 14, 15, 16 + 17, 18  | Inventario de equipos, imágenes, consulta. Registro y validaciones de préstamo.      |
-
-Detalle completo de cada punto en `REPARTICION.md`.
 
 ---
 
