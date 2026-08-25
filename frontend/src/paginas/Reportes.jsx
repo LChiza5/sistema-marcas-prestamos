@@ -160,6 +160,8 @@ export default function Reportes() {
               value={filtros.anio}
               onChange={handleCambioFiltro}
               placeholder="Ej. 2026"
+              min="1990"
+              max={new Date().getFullYear()}
             />
           </div>
           <div className="col-md-2">
