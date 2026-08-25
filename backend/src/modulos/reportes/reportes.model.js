@@ -1,144 +1,86 @@
 import { pool } from '../../config/db.js';
 
-export async function obtenerReportesMarcas(filtros = {}) {
-  try {
-    let query = pool('marcas as m')
-      .select(
-        'u.id as id_usuario',
-        'u.nombre_completo as usuario',
-        'd.nombre as departamento',
-        pool.raw("DATE(m.timestamp) as fecha"),
-        db.raw("TIME(m.timestamp) as hora"),
-        'm.tipo',
-        'm.dispositivo',
-        'm.ip'
-      )
-      .leftJoin('usuarios as u', 'm.id_usuario', 'u.id')
-      .leftJoin('departamentos as d', 'u.id_departamento', 'd.id')
-      .orderBy('m.id_usuario')
-      .orderBy('fecha')
-      .orderBy('m.timestamp');
+/**
+ * Acceso a datos del módulo de reportes.
+ * Todas las consultas son parametrizadas para prevenir inyección SQL (punto 12).
+ */
 
-    if (filtros.usuario) {
-      query.where('m.id_usuario', filtros.usuario);
-    }
-    if (filtros.departamento) {
-      query.where('u.id_departamento', filtros.departamento);
-    }
-    if (filtros.anio) {
-      query.whereRaw('YEAR(m.timestamp) = ?', [filtros.anio]);
-    }
-    if (filtros.mes) {
-      query.whereRaw('MONTH(m.timestamp) = ?', [filtros.mes]);
-    }
-    if (filtros.dia) {
-      query.whereRaw('DAY(m.timestamp) = ?', [filtros.dia]);
-    }
+/**
+ * Construye la cláusula WHERE y el arreglo de parámetros a partir de los
+ * filtros recibidos. Los filtros son opcionales y se combinan con AND,
+ * por lo que se pueden usar juntos o por separado.
+ *
+ * Filtros soportados: usuario, anio, mes, dia, departamento.
+ */
+function construirFiltros({ usuario, anio, mes, dia, departamento }) {
+  const condiciones = [];
+  const parametros = [];
 
-    const marcas = await query;
-    const reportesPorTurno = agruparPorTurno(marcas);
-    
-    return reportesPorTurno;
-
-  } catch (error) {
-    console.error('Error en obtenerReportesMarcas:', error);
-    throw error;
+  if (usuario) {
+    condiciones.push('u.id = ?');
+    parametros.push(Number(usuario));
   }
+  if (anio) {
+    condiciones.push('YEAR(m.fecha) = ?');
+    parametros.push(Number(anio));
+  }
+  if (mes) {
+    condiciones.push('MONTH(m.fecha) = ?');
+    parametros.push(Number(mes));
+  }
+  if (dia) {
+    condiciones.push('DAY(m.fecha) = ?');
+    parametros.push(Number(dia));
+  }
+  if (departamento) {
+    condiciones.push('u.id_departamento = ?');
+    parametros.push(Number(departamento));
+  }
+
+  const where = condiciones.length > 0 ? `WHERE ${condiciones.join(' AND ')}` : '';
+  return { where, parametros };
 }
 
-function agruparPorTurno(marcas) {
-  const turnos = [];
-  const porUsuarioFecha = {};
+/**
+ * Punto 11 y 12 — Reporte de marcas con filtros combinables.
+ *
+ * Cada marca individual (ENTRADA o SALIDA) se guarda como una fila en la
+ * tabla `marcas`. El reporte agrupa las marcas de un mismo usuario en un
+ * mismo día para poder mostrar la hora de entrada y la hora de salida en
+ * una sola fila, junto con el dispositivo y la IP usados en cada una.
+ */
+export async function obtenerMarcas(filtros) {
+  const { where, parametros } = construirFiltros(filtros);
 
-  marcas.forEach(marca => {
-    const clave = `${marca.id_usuario}_${marca.fecha}`;
-    if (!porUsuarioFecha[clave]) {
-      porUsuarioFecha[clave] = {
-        usuario: marca.usuario,
-        departamento: marca.departamento,
-        id_usuario: marca.id_usuario,
-        fecha: marca.fecha,
-        marcas: []
-      };
-    }
-    porUsuarioFecha[clave].marcas.push(marca);
-  });
+  const [filas] = await pool.query(
+    `SELECT
+        u.id                 AS id_usuario,
+        u.nombre_completo    AS usuario,
+        dep.nombre           AS departamento,
+        m.fecha,
+        MAX(CASE WHEN m.tipo = 'ENTRADA' THEN m.hora END)          AS hora_entrada,
+        MAX(CASE WHEN m.tipo = 'SALIDA'  THEN m.hora END)          AS hora_salida,
+        MAX(CASE WHEN m.tipo = 'ENTRADA' THEN m.ip END)            AS ip_entrada,
+        MAX(CASE WHEN m.tipo = 'SALIDA'  THEN m.ip END)            AS ip_salida,
+        MAX(CASE WHEN m.tipo = 'ENTRADA' THEN disp.nombre END)     AS dispositivo_entrada,
+        MAX(CASE WHEN m.tipo = 'SALIDA'  THEN disp.nombre END)     AS dispositivo_salida
+      FROM marcas m
+      INNER JOIN usuarios u      ON u.id = m.id_usuario
+      LEFT JOIN departamentos dep ON dep.id = u.id_departamento
+      LEFT JOIN dispositivos disp ON disp.id = m.id_dispositivo
+      ${where}
+      GROUP BY u.id, m.fecha
+      ORDER BY m.fecha DESC, u.nombre_completo ASC`,
+    parametros
+  );
 
-  Object.values(porUsuarioFecha).forEach(grupo => {
-    const marcasDelDia = grupo.marcas;
-    let horaEntrada = null;
-    let dispositivoEntrada = null;
-    let ipEntrada = null;
+  return filas;
+}
 
-    for (let i = 0; i < marcasDelDia.length; i++) {
-      const marca = marcasDelDia[i];
-
-      if (marca.tipo === 'ENTRADA') {
-        if (horaEntrada !== null) {
-          turnos.push({
-            usuario: grupo.usuario,
-            departamento: grupo.departamento,
-            fecha: grupo.fecha,
-            hora_entrada: horaEntrada,
-            hora_salida: null,
-            dispositivo_entrada: dispositivoEntrada,
-            dispositivo_salida: null,
-            ip_entrada: ipEntrada,
-            ip_salida: null
-          });
-        }
-
-        horaEntrada = marca.hora;
-        dispositivoEntrada = marca.dispositivo;
-        ipEntrada = marca.ip;
-
-      } else if (marca.tipo === 'SALIDA') {
-        if (horaEntrada !== null) {
-          turnos.push({
-            usuario: grupo.usuario,
-            departamento: grupo.departamento,
-            fecha: grupo.fecha,
-            hora_entrada: horaEntrada,
-            hora_salida: marca.hora,
-            dispositivo_entrada: dispositivoEntrada,
-            dispositivo_salida: marca.dispositivo,
-            ip_entrada: ipEntrada,
-            ip_salida: marca.ip
-          });
-
-          horaEntrada = null;
-          dispositivoEntrada = null;
-          ipEntrada = null;
-        } else {
-          turnos.push({
-            usuario: grupo.usuario,
-            departamento: grupo.departamento,
-            fecha: grupo.fecha,
-            hora_entrada: null,
-            hora_salida: marca.hora,
-            dispositivo_entrada: null,
-            dispositivo_salida: marca.dispositivo,
-            ip_entrada: null,
-            ip_salida: marca.ip
-          });
-        }
-      }
-    }
-
-    if (horaEntrada !== null) {
-      turnos.push({
-        usuario: grupo.usuario,
-        departamento: grupo.departamento,
-        fecha: grupo.fecha,
-        hora_entrada: horaEntrada,
-        hora_salida: null,
-        dispositivo_entrada: dispositivoEntrada,
-        dispositivo_salida: null,
-        ip_entrada: ipEntrada,
-        ip_salida: null
-      });
-    }
-  });
-
-  return turnos;
+/** Obtiene los usuarios del sistema para el selector del reporte. */
+export async function obtenerUsuarios() {
+  const [filas] = await pool.query(
+    'SELECT id, nombre_completo, usuario FROM usuarios WHERE activo = 1 ORDER BY nombre_completo ASC'
+  );
+  return filas;
 }

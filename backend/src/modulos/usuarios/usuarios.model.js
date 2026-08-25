@@ -134,16 +134,29 @@ export async function marcarTokenUsado(id) {
  * Elimina las sesiones activas de un usuario de la tabla de sesiones.
  * Si se pasa sessionIdActual, se excluye esa sesión (para no cerrar la propia).
  */
+/**
+ * Elimina las sesiones activas de un usuario, para que dejen de ser válidas
+ * al cambiar/restablecer la contraseña. La tabla `sesiones` (usada por el
+ * almacén de sesiones de MySQL) sólo tiene session_id/expires/data — no una
+ * columna id_usuario — así que el id del usuario se busca dentro del JSON
+ * guardado en `data`.
+ */
 export async function eliminarSesionesUsuario(idUsuario, sessionIdActual = null) {
-  if (sessionIdActual) {
-    await pool.query(
-      'DELETE FROM sesiones WHERE id_usuario = ? AND session_id != ?',
-      [idUsuario, sessionIdActual]
-    );
-  } else {
-    await pool.query(
-      'DELETE FROM sesiones WHERE id_usuario = ?',
-      [idUsuario]
-    );
+  const [filas] = await pool.query('SELECT session_id, data FROM sesiones');
+
+  const idsAEliminar = filas
+    .filter((fila) => {
+      if (!fila.data) return false;
+      try {
+        return JSON.parse(fila.data)?.usuario?.id === idUsuario;
+      } catch {
+        return false;
+      }
+    })
+    .map((fila) => fila.session_id)
+    .filter((sessionId) => sessionId !== sessionIdActual);
+
+  if (idsAEliminar.length > 0) {
+    await pool.query('DELETE FROM sesiones WHERE session_id IN (?)', [idsAEliminar]);
   }
 }
