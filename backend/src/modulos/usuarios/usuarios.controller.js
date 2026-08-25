@@ -182,13 +182,16 @@ export async function solicitarRecuperacion(req, res, next) {
     const enlace =
       `${origenFrontend}/restablecer-password?token=${token}`;
 
-    // Temporalmente se muestra el enlace para poder probar la recuperación.
+    // El enlace sólo se registra en el servidor (aquí se simula el envío
+    // por correo). Nunca debe devolverse en la respuesta HTTP: si viajara
+    // en el JSON, cualquiera podría restablecer la contraseña de otra
+    // persona sin acceder a su correo real.
     console.log(`Enlace de recuperación: ${enlace}`);
 
     return exito(
       res,
-      { enlace },
-      ''
+      null,
+      'Si la cuenta existe, se generaron las instrucciones de recuperación'
     );
   } catch (err) {
     next(err);

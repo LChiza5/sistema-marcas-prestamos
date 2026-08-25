@@ -76,6 +76,13 @@ export async function actualizar(req, res, next) {
     const errores = validarActualizacion(req.body);
     if (errores.length > 0) return error(res, 'Los datos enviados no son válidos', 400, errores);
 
+    if (req.body.estado !== equipo.estado) {
+      const enPrestamo = await modelo.tienePrestamosPendientes(id);
+      if (enPrestamo) {
+        return error(res, 'No se puede cambiar el estado de un equipo con préstamos pendientes de devolución', 409);
+      }
+    }
+
     await modelo.actualizar(id, {
       descripcion: req.body.descripcion.trim(),
       estado: req.body.estado,

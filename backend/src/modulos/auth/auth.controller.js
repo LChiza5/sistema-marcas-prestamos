@@ -2,8 +2,10 @@ import bcrypt from 'bcryptjs';
 import { creado, error, exito } from '../../utils/respuesta.js';
 import { validarLogin, validarRegistro } from './auth.validaciones.js';
 import * as modelo from './auth.model.js';
+import * as configuracionModelo from '../configuracion/configuracion.model.js';
 
 const RONDAS_HASH = 10;
+const MINUTOS_SESION_POR_DEFECTO = 60;
 
 /** Punto 1 — Registro de usuario. */
 export async function registrar(req, res, next) {
@@ -72,9 +74,17 @@ export async function iniciarSesion(req, res, next) {
     };
 
     // Se regenera el identificador de sesión para evitar fijación de sesión.
-    req.session.regenerate((err) => {
+    req.session.regenerate(async (err) => {
       if (err) return next(err);
       req.session.usuario = usuario;
+
+      // El tiempo máximo de sesión es configurable por el administrador
+      // (tabla configuracion, clave minutos_sesion). Se aplica en cada
+      // login para que un cambio reciente sí tenga efecto real.
+      const parametro = await configuracionModelo.obtenerPorClave('minutos_sesion');
+      const minutos = Number(parametro?.valor ?? MINUTOS_SESION_POR_DEFECTO);
+      req.session.cookie.maxAge = minutos * 60 * 1000;
+
       return exito(res, usuario, 'Sesión iniciada correctamente');
     });
   } catch (err) {
