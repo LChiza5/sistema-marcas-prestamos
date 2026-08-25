@@ -106,19 +106,24 @@ export default function Dispositivos() {
 
   return (
     <>
-      <div className="mb-4">
-        <h1 className="h4 mb-1">
-          <i className="bi bi-phone me-2"></i>
-          Mis dispositivos autorizados
-        </h1>
-        <p className="text-secondary mb-0">
-          Dispositivos desde los cuales puede registrar sus marcas de entrada y salida.
-          El dispositivo registrado más reciente que siga activo es el que se asociará
-          automáticamente a sus próximas marcas.
-        </p>
+      <div className="encabezado-pagina">
+        <div className="d-flex align-items-center gap-3">
+          <span className="icono-encabezado">
+            <i className="bi bi-laptop"></i>
+          </span>
+          <div>
+            <h1>Mis dispositivos autorizados</h1>
+            <p>El dispositivo activo más reciente se asocia automáticamente a sus próximas marcas</p>
+          </div>
+        </div>
       </div>
 
-      {mensajeExito && <div className="alert alert-success">{mensajeExito}</div>}
+      {mensajeExito && (
+        <div className="alert alert-success d-flex align-items-center gap-2">
+          <i className="bi bi-check-circle-fill"></i>
+          {mensajeExito}
+        </div>
+      )}
 
       {errores.length > 0 && (
         <div className="alert alert-danger">
@@ -130,12 +135,12 @@ export default function Dispositivos() {
         </div>
       )}
 
-      <div className="card mb-4">
-        <div className="card-header fw-semibold">
+      <div className="superficie mb-4 aparecer">
+        <div className="px-4 pt-4 fw-semibold">
           {idEdicion ? 'Modificar dispositivo' : 'Registrar este dispositivo'}
         </div>
 
-        <div className="card-body">
+        <div className="p-4">
           <form onSubmit={guardar}>
             <div className="row g-3">
               <div className="col-md-4">
@@ -179,7 +184,7 @@ export default function Dispositivos() {
 
               <div className="col-12 d-flex gap-2">
                 <button className="btn btn-primary" disabled={enviando}>
-                  <i className={`bi ${idEdicion ? 'bi-floppy' : 'bi-plus-circle'} me-1`}></i>
+                  <i className={`bi ${idEdicion ? 'bi-check-lg' : 'bi-plus-lg'} me-1`}></i>
                   {enviando ? 'Guardando…' : idEdicion ? 'Guardar cambios' : 'Registrar dispositivo'}
                 </button>
 
@@ -199,73 +204,66 @@ export default function Dispositivos() {
         </div>
       </div>
 
-      <div className="card">
-        <div className="card-body p-0">
-          {cargando ? (
-            <p className="text-secondary p-3 mb-0">Cargando dispositivos…</p>
-          ) : dispositivos.length === 0 ? (
-            <p className="text-secondary p-3 mb-0">
-              Aún no ha registrado ningún dispositivo.
-            </p>
-          ) : (
-            <div className="table-responsive">
-              <table className="table table-hover align-middle mb-0">
-                <thead className="table-light">
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Registrado</th>
-                    <th>Estado</th>
-                    <th className="text-end">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dispositivos.map((dispositivo) => (
-                    <tr key={dispositivo.id}>
-                      <td className="fw-semibold">{dispositivo.nombre}</td>
-                      <td>{dispositivo.descripcion || '—'}</td>
-                      <td>{new Date(dispositivo.fecha_registro).toLocaleString('es-CR')}</td>
-                      <td>
-                        <span
-                          className={`badge ${
-                            dispositivo.estado === 'ACTIVO' ? 'text-bg-success' : 'text-bg-secondary'
-                          }`}
+      <div className="superficie aparecer">
+        {cargando ? (
+          <p className="text-secondary p-4 mb-0">Cargando dispositivos…</p>
+        ) : dispositivos.length === 0 ? (
+          <p className="text-secondary p-4 mb-0">Aún no ha registrado ningún dispositivo.</p>
+        ) : (
+          <div className="table-responsive">
+            <table className="table tabla-limpia mb-0">
+              <thead>
+                <tr>
+                  <th className="ps-4">Nombre</th>
+                  <th>Descripción</th>
+                  <th>Registrado</th>
+                  <th>Estado</th>
+                  <th className="text-end pe-4">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dispositivos.map((dispositivo) => (
+                  <tr key={dispositivo.id}>
+                    <td className="ps-4 fw-semibold">{dispositivo.nombre}</td>
+                    <td className="text-secondary">{dispositivo.descripcion || '—'}</td>
+                    <td className="text-secondary">
+                      {new Date(dispositivo.fecha_registro).toLocaleString('es-CR')}
+                    </td>
+                    <td>
+                      <span className={`insignia-estado ${dispositivo.estado === 'ACTIVO' ? 'insignia-verde' : 'insignia-gris'}`}>
+                        {dispositivo.estado}
+                      </span>
+                    </td>
+                    <td className="text-end pe-4">
+                      <div className="btn-group btn-group-sm">
+                        <button
+                          className="btn btn-outline-primary"
+                          onClick={() => seleccionarEdicion(dispositivo)}
                         >
-                          {dispositivo.estado}
-                        </span>
-                      </td>
-                      <td className="text-end">
-                        <div className="btn-group btn-group-sm">
-                          <button
-                            className="btn btn-outline-primary"
-                            onClick={() => seleccionarEdicion(dispositivo)}
-                          >
-                            <i className="bi bi-pencil me-1"></i>
-                            Editar
-                          </button>
+                          <i className="bi bi-pencil"></i>
+                        </button>
 
-                          <button
-                            className="btn btn-outline-danger"
-                            onClick={() => eliminar(dispositivo)}
-                          >
-                            <i className="bi bi-trash me-1"></i>
-                            Eliminar
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+                        <button
+                          className="btn btn-outline-danger"
+                          onClick={() => eliminar(dispositivo)}
+                        >
+                          <i className="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       <p className="text-secondary small mt-3">
-        Nota: por seguridad del navegador no es posible leer la dirección MAC real del
-        equipo; el identificador único de cada dispositivo lo genera el servidor y se
-        guarda en una cookie <code>id_dispositivo</code>.
+        <i className="bi bi-info-circle me-1"></i>
+        Por seguridad del navegador no es posible leer la dirección MAC real del equipo;
+        el identificador único de cada dispositivo lo genera el servidor y se guarda en
+        una cookie <code>id_dispositivo</code>.
       </p>
     </>
   );

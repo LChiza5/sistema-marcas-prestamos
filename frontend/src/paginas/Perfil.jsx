@@ -72,30 +72,38 @@ export default function Perfil() {
   }
 
   if (cargando) {
-    return <p className="text-secondary">Cargando perfil…</p>;
+    return (
+      <div className="d-flex align-items-center gap-2 text-secondary">
+        <span className="spinner-border spinner-border-sm"></span>
+        Cargando perfil…
+      </div>
+    );
   }
 
   return (
     <>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <div>
-          <h1 className="h4 mb-1">
-            <i className="bi bi-person-circle me-2"></i>
-            Mi perfil
-          </h1>
-          <p className="text-secondary mb-0">
-            Consulte y actualice su información personal.
-          </p>
+      <div className="encabezado-pagina">
+        <div className="d-flex align-items-center gap-3">
+          <span className="icono-encabezado">
+            <i className="bi bi-person-circle"></i>
+          </span>
+          <div>
+            <h1>Mi perfil</h1>
+            <p>Consulte y actualice su información personal</p>
+          </div>
         </div>
 
         <Link className="btn btn-outline-primary" to="/cambiar-contrasena">
-          <i className="bi bi-key me-1"></i>
+          <i className="bi bi-shield-lock me-1"></i>
           Cambiar contraseña
         </Link>
       </div>
 
       {mensajeExito && (
-        <div className="alert alert-success">{mensajeExito}</div>
+        <div className="alert alert-success d-flex align-items-center gap-2">
+          <i className="bi bi-check-circle-fill"></i>
+          {mensajeExito}
+        </div>
       )}
 
       {errores.length > 0 && (
@@ -108,8 +116,8 @@ export default function Perfil() {
         </div>
       )}
 
-      <div className="card">
-        <div className="card-body">
+      <div className="superficie aparecer" style={{ maxWidth: '40rem' }}>
+        <div className="p-4">
           <form onSubmit={guardar}>
             <div className="row g-3">
               <div className="col-md-6">
@@ -137,27 +145,14 @@ export default function Perfil() {
 
               <div className="col-md-6">
                 <label className="form-label">Correo electrónico</label>
-                <input
-                  className="form-control"
-                  type="email"
-                  value={datos.correo}
-                  disabled
-                />
-                <div className="form-text">
-                  El correo no se puede modificar desde el perfil.
-                </div>
+                <input className="form-control" type="email" value={datos.correo} disabled />
+                <div className="form-text">No se puede modificar desde el perfil.</div>
               </div>
 
               <div className="col-md-6">
                 <label className="form-label">Nombre de usuario</label>
-                <input
-                  className="form-control"
-                  value={datos.usuario}
-                  disabled
-                />
-                <div className="form-text">
-                  El nombre de usuario no se puede modificar.
-                </div>
+                <input className="form-control" value={datos.usuario} disabled />
+                <div className="form-text">No se puede modificar.</div>
               </div>
 
               <div className="col-md-6">
@@ -178,10 +173,19 @@ export default function Perfil() {
                 </select>
               </div>
 
-              <div className="col-12">
+              <div className="col-12 pt-2">
                 <button className="btn btn-primary" disabled={enviando}>
-                  <i className="bi bi-floppy me-1"></i>
-                  {enviando ? 'Guardando…' : 'Guardar cambios'}
+                  {enviando ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2"></span>
+                      Guardando…
+                    </>
+                  ) : (
+                    <>
+                      <i className="bi bi-check-lg me-1"></i>
+                      Guardar cambios
+                    </>
+                  )}
                 </button>
               </div>
             </div>

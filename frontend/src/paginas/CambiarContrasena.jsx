@@ -41,19 +41,24 @@ export default function CambiarContrasena() {
   }
 
   return (
-    <div style={{ maxWidth: '36rem' }}>
-      <div className="mb-4">
-        <h1 className="h4 mb-1">
-          <i className="bi bi-key me-2"></i>
-          Cambiar contraseña
-        </h1>
-        <p className="text-secondary mb-0">
-          Ingrese su contraseña actual antes de establecer una nueva.
-        </p>
+    <>
+      <div className="encabezado-pagina">
+        <div className="d-flex align-items-center gap-3">
+          <span className="icono-encabezado">
+            <i className="bi bi-shield-lock"></i>
+          </span>
+          <div>
+            <h1>Cambiar contraseña</h1>
+            <p>Ingrese su contraseña actual antes de establecer una nueva</p>
+          </div>
+        </div>
       </div>
 
       {mensajeExito && (
-        <div className="alert alert-success">{mensajeExito}</div>
+        <div className="alert alert-success d-flex align-items-center gap-2">
+          <i className="bi bi-check-circle-fill"></i>
+          {mensajeExito}
+        </div>
       )}
 
       {errores.length > 0 && (
@@ -66,8 +71,8 @@ export default function CambiarContrasena() {
         </div>
       )}
 
-      <div className="card">
-        <div className="card-body">
+      <div className="superficie aparecer" style={{ maxWidth: '32rem' }}>
+        <div className="p-4">
           <form onSubmit={enviar}>
             <div className="mb-3">
               <label className="form-label">Contraseña actual</label>
@@ -96,7 +101,7 @@ export default function CambiarContrasena() {
               </div>
             </div>
 
-            <div className="mb-3">
+            <div className="mb-4">
               <label className="form-label">Confirmar nueva contraseña</label>
               <input
                 className="form-control"
@@ -120,6 +125,6 @@ export default function CambiarContrasena() {
           </form>
         </div>
       </div>
-    </div>
+    </>
   );
 }

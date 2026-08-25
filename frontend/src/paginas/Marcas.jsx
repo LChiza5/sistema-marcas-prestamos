@@ -90,141 +90,142 @@ export default function Marcas() {
 
   return (
     <>
-      <div className="mb-4">
-        <h1 className="h4 mb-1">
-          <i className="bi bi-clock-history me-2"></i>
-          Registro de marcas
-        </h1>
-        <p className="text-secondary mb-0">
-          El servidor determina automáticamente si corresponde una entrada o una
-          salida, según su última marca del día.
-        </p>
+      <div className="encabezado-pagina">
+        <div className="d-flex align-items-center gap-3">
+          <span className="icono-encabezado">
+            <i className="bi bi-fingerprint"></i>
+          </span>
+          <div>
+            <h1>Registro de marcas</h1>
+            <p>El sistema determina automáticamente si corresponde una entrada o una salida</p>
+          </div>
+        </div>
       </div>
 
-      {mensajeExito && <div className="alert alert-success">{mensajeExito}</div>}
+      {mensajeExito && (
+        <div className="alert alert-success d-flex align-items-center gap-2">
+          <i className="bi bi-check-circle-fill"></i>
+          {mensajeExito}
+        </div>
+      )}
       {mensajeError && (
-        <div className="alert alert-danger">
-          <i className="bi bi-exclamation-triangle me-1"></i>
+        <div className="alert alert-danger d-flex align-items-center gap-2">
+          <i className="bi bi-exclamation-triangle-fill"></i>
           {mensajeError}
         </div>
       )}
 
-      <div className="card mb-4">
-        <div className="card-body text-center py-4">
-          <p className="text-secondary mb-2">Próxima marca a registrar</p>
-          <span
-            className={`badge fs-6 mb-3 ${
-              proximoTipo === 'ENTRADA' ? 'text-bg-success' : 'text-bg-warning'
-            }`}
+      <div className="superficie-elevada text-center py-5 mb-4 aparecer">
+        <p className="text-secondary small text-uppercase fw-bold mb-2" style={{ letterSpacing: '0.06em' }}>
+          Próxima marca a registrar
+        </p>
+        <span className={`insignia-estado ${proximoTipo === 'ENTRADA' ? 'insignia-verde' : 'insignia-ambar'} fs-6 mb-4`}>
+          {proximoTipo}
+        </span>
+        <div>
+          <button
+            className="btn btn-primary btn-lg px-5"
+            onClick={registrarMarca}
+            disabled={registrando}
           >
-            {proximoTipo}
-          </span>
-          <div>
-            <button
-              className="btn btn-primary btn-lg"
-              onClick={registrarMarca}
-              disabled={registrando}
-            >
-              <i className="bi bi-fingerprint me-2"></i>
-              {registrando ? 'Registrando…' : `Marcar ${proximoTipo.toLowerCase()}`}
-            </button>
-          </div>
-          <p className="text-secondary small mt-3 mb-0">
-            Si la marca falla con un mensaje sobre la red actual, es la validación
-            del punto 10 (rango de IP permitido) rechazando la solicitud.
-          </p>
+            {registrando ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2"></span>
+                Registrando…
+              </>
+            ) : (
+              <>
+                <i className="bi bi-fingerprint me-2"></i>
+                Marcar {proximoTipo.toLowerCase()}
+              </>
+            )}
+          </button>
         </div>
+        <p className="text-secondary small mt-3 mb-0">
+          Si la marca es rechazada por la red actual, es la validación del rango de IP permitido.
+        </p>
       </div>
 
-      <div className="card">
-        <div className="card-header fw-semibold">Marcas de hoy</div>
-        <div className="card-body p-0">
-          {cargando ? (
-            <p className="text-secondary p-3 mb-0">Cargando marcas…</p>
-          ) : marcas.length === 0 ? (
-            <p className="text-secondary p-3 mb-0">Todavía no hay marcas registradas hoy.</p>
-          ) : (
-            <div className="table-responsive">
-              <table className="table table-hover align-middle mb-0">
-                <thead className="table-light">
-                  <tr>
-                    <th>Tipo</th>
-                    <th>Hora</th>
-                    <th>Dispositivo</th>
-                    <th>Dirección IP</th>
+      <div className="superficie aparecer">
+        <div className="px-4 pt-3 pb-1 fw-semibold">Marcas de hoy</div>
+        {cargando ? (
+          <p className="text-secondary p-4 mb-0">Cargando marcas…</p>
+        ) : marcas.length === 0 ? (
+          <p className="text-secondary p-4 mb-0">Todavía no hay marcas registradas hoy.</p>
+        ) : (
+          <div className="table-responsive">
+            <table className="table tabla-limpia mb-0">
+              <thead>
+                <tr>
+                  <th className="ps-4">Tipo</th>
+                  <th>Hora</th>
+                  <th>Dispositivo</th>
+                  <th className="pe-4">Dirección IP</th>
+                </tr>
+              </thead>
+              <tbody>
+                {marcas.map((marca) => (
+                  <tr key={marca.id}>
+                    <td className="ps-4">
+                      <span className={`insignia-estado ${marca.tipo === 'ENTRADA' ? 'insignia-verde' : 'insignia-ambar'}`}>
+                        {marca.tipo}
+                      </span>
+                    </td>
+                    <td>{marca.hora}</td>
+                    <td>{marca.dispositivo || '—'}</td>
+                    <td className="pe-4 text-secondary">{marca.ip}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {marcas.map((marca) => (
-                    <tr key={marca.id}>
-                      <td>
-                        <span
-                          className={`badge ${
-                            marca.tipo === 'ENTRADA' ? 'text-bg-success' : 'text-bg-warning'
-                          }`}
-                        >
-                          {marca.tipo}
-                        </span>
-                      </td>
-                      <td>{marca.hora}</td>
-                      <td>{marca.dispositivo || '—'}</td>
-                      <td>{marca.ip}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {esAdministrador && (
-        <div className="card mt-4">
-          <div className="card-header fw-semibold">
+        <div className="superficie mt-4 p-4 aparecer">
+          <div className="fw-semibold mb-1">
             <i className="bi bi-shield-lock me-1"></i>
-            Configuración de red permitida (punto 10)
+            Configuración de red permitida
           </div>
-          <div className="card-body">
-            <p className="text-secondary small">
-              IPs o rangos CIDR separados por coma (ej. <code>127.0.0.1, 192.168.1.0/24</code>).
-              Déjelo vacío y guarde con un valor amplio como <code>0.0.0.0/0</code> para no
-              restringir, o ponga una IP distinta a la suya para forzar el rechazo y probar
-              el mensaje de error.
+          <p className="text-secondary small">
+            IPs o rangos CIDR separados por coma (ej. <code>127.0.0.1, 192.168.1.0/24</code>).
+            Use <code>0.0.0.0/0</code> para no restringir, o una IP distinta a la suya para
+            forzar el rechazo y probar el mensaje de error.
+          </p>
+
+          {mensajeRango && <div className="alert alert-success py-2 small">{mensajeRango}</div>}
+          {erroresRango.length > 0 && (
+            <div className="alert alert-danger py-2 small">
+              <ul className="mb-0 ps-3">
+                {erroresRango.map((m) => (
+                  <li key={m}>{m}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <form className="row g-2 align-items-end" onSubmit={guardarRango}>
+            <div className="col-md-8">
+              <label className="form-label">Rangos permitidos</label>
+              <input
+                className="form-control"
+                value={rangoIp}
+                onChange={(e) => setRangoIp(e.target.value)}
+              />
+            </div>
+            <div className="col-md-4">
+              <button className="btn btn-outline-primary w-100" disabled={guardandoRango}>
+                {guardandoRango ? 'Guardando…' : 'Guardar rango'}
+              </button>
+            </div>
+          </form>
+
+          {rangoIpGuardado && (
+            <p className="text-secondary small mt-2 mb-0">
+              Valor actual guardado: <code>{rangoIpGuardado}</code>
             </p>
-
-            {mensajeRango && <div className="alert alert-success py-2">{mensajeRango}</div>}
-            {erroresRango.length > 0 && (
-              <div className="alert alert-danger py-2">
-                <ul className="mb-0 ps-3">
-                  {erroresRango.map((m) => (
-                    <li key={m}>{m}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            <form className="row g-2 align-items-end" onSubmit={guardarRango}>
-              <div className="col-md-8">
-                <label className="form-label">Rangos permitidos</label>
-                <input
-                  className="form-control"
-                  value={rangoIp}
-                  onChange={(e) => setRangoIp(e.target.value)}
-                />
-              </div>
-              <div className="col-md-4">
-                <button className="btn btn-outline-primary w-100" disabled={guardandoRango}>
-                  {guardandoRango ? 'Guardando…' : 'Guardar rango'}
-                </button>
-              </div>
-            </form>
-
-            {rangoIpGuardado && (
-              <p className="text-secondary small mt-2 mb-0">
-                Valor actual guardado: <code>{rangoIpGuardado}</code>
-              </p>
-            )}
-          </div>
+          )}
         </div>
       )}
     </>
