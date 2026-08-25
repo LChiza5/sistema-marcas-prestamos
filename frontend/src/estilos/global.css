@@ -532,6 +532,42 @@ body {
 .icono-morado { background: linear-gradient(135deg, color-mix(in srgb, #7c5cff 18%, var(--color-surface)), color-mix(in srgb, #7c5cff 8%, var(--color-surface))); color: #7c5cff; }
 
 /* --------------------------------------------------------------------
+   Migas de pan / regreso al panel principal
+   -------------------------------------------------------------------- */
+.migas-pan {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.migas-pan .bi-chevron-right {
+  font-size: 0.65rem;
+  opacity: 0.6;
+}
+
+.enlace-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem 0.35rem 0.55rem;
+  border-radius: 999px;
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  transition: background-color 0.15s ease, gap 0.15s ease;
+}
+
+.enlace-volver:hover {
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  gap: 0.6rem;
+}
+
+/* --------------------------------------------------------------------
    Animación sutil de entrada
    -------------------------------------------------------------------- */
 @keyframes aparecer {

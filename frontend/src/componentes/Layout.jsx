@@ -1,12 +1,26 @@
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import SelectorTema from './SelectorTema.jsx';
 
 const enlaceClase = ({ isActive }) => `nav-link${isActive ? ' activo' : ''}`;
 
+const TITULOS_PAGINA = {
+  '/marcas': 'Marcas',
+  '/dispositivos': 'Dispositivos',
+  '/perfil': 'Mi perfil',
+  '/cambiar-contrasena': 'Cambiar contraseña',
+  '/equipos': 'Equipos',
+  '/prestamos': 'Préstamos',
+  '/reportes': 'Reportes',
+  '/departamentos': 'Departamentos',
+  '/configuracion': 'Configuración',
+};
+
 export default function Layout() {
   const { usuario, logout, esAdministrador } = useAuth();
   const navegar = useNavigate();
+  const ubicacion = useLocation();
+  const enInicio = ubicacion.pathname === '/';
 
   async function cerrarSesion() {
     await logout();
@@ -126,6 +140,21 @@ export default function Layout() {
       </nav>
 
       <main className="container py-4 aparecer">
+        {!enInicio && (
+          <nav className="migas-pan" aria-label="breadcrumb">
+            <Link to="/" className="enlace-volver">
+              <i className="bi bi-arrow-left"></i>
+              Panel principal
+            </Link>
+            {TITULOS_PAGINA[ubicacion.pathname] && (
+              <>
+                <i className="bi bi-chevron-right"></i>
+                <span>{TITULOS_PAGINA[ubicacion.pathname]}</span>
+              </>
+            )}
+          </nav>
+        )}
+
         <Outlet />
       </main>
     </>
