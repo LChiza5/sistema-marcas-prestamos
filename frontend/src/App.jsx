@@ -15,6 +15,7 @@ import RestablecerContrasena from './paginas/RestablecerContrasena.jsx';
 import Departamentos from './paginas/Departamentos.jsx';
 import Marcas from './paginas/Marcas.jsx';
 import Dispositivos from './paginas/Dispositivos.jsx';
+import Configuracion from './paginas/Configuracion.jsx';
 
 export default function App() {
   return (
@@ -75,7 +76,15 @@ export default function App() {
             </RutaProtegida>
           }
         />
-        
+
+        <Route
+          path="/configuracion"
+          element={
+            <RutaProtegida soloAdministrador>
+              <Configuracion />
+            </RutaProtegida>
+          }
+        />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

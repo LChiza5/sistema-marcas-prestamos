@@ -3,11 +3,11 @@ import { api, API_ORIGEN } from '../api/cliente.js';
 
 const DATOS_INICIALES = { codigo: '', descripcion: '' };
 
-const COLOR_ESTADO = {
-  DISPONIBLE: 'success',
-  PRESTADO: 'warning',
-  MANTENIMIENTO: 'secondary',
-  INACTIVO: 'dark',
+const CLASE_ESTADO = {
+  DISPONIBLE: 'insignia-verde',
+  PRESTADO: 'insignia-ambar',
+  MANTENIMIENTO: 'insignia-gris',
+  INACTIVO: 'insignia-roja',
 };
 
 const ESTADOS_EDITABLES = ['DISPONIBLE', 'MANTENIMIENTO', 'INACTIVO'];
@@ -113,21 +113,29 @@ export default function Equipos() {
 
   return (
     <>
-      <h1 className="h4 mb-4">
-        <i className="bi bi-box-seam me-2"></i>
-        Inventario de equipos
-      </h1>
+      <div className="encabezado-pagina">
+        <div className="d-flex align-items-center gap-3">
+          <span className="icono-encabezado">
+            <i className="bi bi-box-seam"></i>
+          </span>
+          <div>
+            <h1>Inventario de equipos</h1>
+            <p>Registre equipos, cargue su imagen y controle su disponibilidad</p>
+          </div>
+        </div>
+      </div>
 
       {mensaje && (
-        <div className={`alert alert-${mensaje.tipo}`} role="alert">
+        <div className={`alert alert-${mensaje.tipo} d-flex align-items-center gap-2`}>
+          <i className={`bi ${mensaje.tipo === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'}`}></i>
           {mensaje.texto}
         </div>
       )}
 
       {/* Punto 14 y 15 — Registro de un equipo nuevo, con imagen opcional. */}
-      <div className="card mb-4">
-        <div className="card-body">
-          <h2 className="h6 mb-3">Registrar equipo</h2>
+      <div className="superficie mb-4 aparecer">
+        <div className="p-4">
+          <h2 className="h6 fw-bold mb-3">Registrar equipo</h2>
 
           {errores.length > 0 && (
             <div className="alert alert-danger">
@@ -170,110 +178,109 @@ export default function Equipos() {
       </div>
 
       {/* Punto 16 — Consulta del inventario. */}
-      <div className="card">
-        <div className="card-body">
-          <h2 className="h6 mb-3">Equipos registrados</h2>
+      <div className="superficie aparecer">
+        <div className="px-4 pt-4 fw-bold h6">Equipos registrados</div>
 
-          {cargando ? (
-            <p className="text-secondary mb-0">Cargando…</p>
-          ) : equipos.length === 0 ? (
-            <p className="text-secondary mb-0">Todavía no hay equipos registrados.</p>
-          ) : (
-            <div className="table-responsive">
-              <table className="table align-middle">
-                <thead>
-                  <tr>
-                    <th>Imagen</th>
-                    <th>Código</th>
-                    <th>Descripción</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {equipos.map((equipo) => {
-                    // El estado PRESTADO lo controla el módulo de préstamos:
-                    // mientras un equipo está prestado no se puede cambiar
-                    // manualmente su estado ni eliminarlo (punto 16).
-                    const bloqueadoPorPrestamo = equipo.estado === 'PRESTADO';
+        {cargando ? (
+          <p className="text-secondary p-4 mb-0">Cargando…</p>
+        ) : equipos.length === 0 ? (
+          <p className="text-secondary p-4 mb-0">Todavía no hay equipos registrados.</p>
+        ) : (
+          <div className="table-responsive">
+            <table className="table tabla-limpia mb-0">
+              <thead>
+                <tr>
+                  <th className="ps-4">Imagen</th>
+                  <th>Código</th>
+                  <th>Descripción</th>
+                  <th>Estado</th>
+                  <th className="pe-4">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {equipos.map((equipo) => {
+                  // El estado PRESTADO lo controla el módulo de préstamos:
+                  // mientras un equipo está prestado no se puede cambiar
+                  // manualmente su estado ni eliminarlo (punto 16).
+                  const bloqueadoPorPrestamo = equipo.estado === 'PRESTADO';
 
-                    return (
-                      <tr key={equipo.id}>
-                        <td>
-                          {equipo.imagen ? (
-                            <img
-                              src={`${API_ORIGEN}/uploads/equipos/${equipo.imagen}`}
-                              alt={equipo.codigo}
-                              width={48}
-                              height={48}
-                              className="rounded object-fit-cover"
-                            />
-                          ) : (
-                            <div
-                              className="d-flex align-items-center justify-content-center bg-light rounded text-secondary"
-                              style={{ width: 48, height: 48 }}
-                            >
-                              <i className="bi bi-image"></i>
-                            </div>
-                          )}
-                        </td>
-
-                        <td>{equipo.codigo}</td>
-                        <td>{equipo.descripcion}</td>
-
-                        <td>
-                          <span className={`badge text-bg-${COLOR_ESTADO[equipo.estado]}`}>{equipo.estado}</span>
-                        </td>
-
-                        <td>
-                          <div className="d-flex align-items-center gap-2">
-                            <select
-                              className="form-select form-select-sm"
-                              style={{ width: '9rem' }}
-                              value={equipo.estado}
-                              disabled={bloqueadoPorPrestamo}
-                              onChange={(evento) => cambiarEstado(equipo, evento.target.value)}
-                            >
-                              {bloqueadoPorPrestamo && <option value="PRESTADO">PRESTADO</option>}
-                              {ESTADOS_EDITABLES.map((estado) => (
-                                <option key={estado} value={estado}>
-                                  {estado}
-                                </option>
-                              ))}
-                            </select>
-
-                            <label
-                              className={`btn btn-sm btn-outline-secondary mb-0 ${bloqueadoPorPrestamo ? 'disabled' : ''}`}
-                              title="Reemplazar imagen"
-                            >
-                              <i className="bi bi-upload"></i>
-                              <input
-                                type="file"
-                                accept="image/jpeg,image/png,image/webp"
-                                hidden
-                                disabled={bloqueadoPorPrestamo}
-                                onChange={(evento) => reemplazarImagen(equipo, evento)}
-                              />
-                            </label>
-
-                            <button
-                              className="btn btn-sm btn-outline-danger"
-                              disabled={bloqueadoPorPrestamo}
-                              title={bloqueadoPorPrestamo ? 'No se puede eliminar un equipo prestado' : 'Eliminar'}
-                              onClick={() => eliminar(equipo)}
-                            >
-                              <i className="bi bi-trash"></i>
-                            </button>
+                  return (
+                    <tr key={equipo.id}>
+                      <td className="ps-4">
+                        {equipo.imagen ? (
+                          <img
+                            src={`${API_ORIGEN}/uploads/equipos/${equipo.imagen}`}
+                            alt={equipo.codigo}
+                            width={44}
+                            height={44}
+                            className="object-fit-cover"
+                            style={{ borderRadius: 'var(--radius-sm)' }}
+                          />
+                        ) : (
+                          <div
+                            className="d-flex align-items-center justify-content-center text-secondary"
+                            style={{ width: 44, height: 44, borderRadius: 'var(--radius-sm)', background: 'var(--color-bg)' }}
+                          >
+                            <i className="bi bi-image"></i>
                           </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+                        )}
+                      </td>
+
+                      <td className="fw-semibold">{equipo.codigo}</td>
+                      <td className="text-secondary">{equipo.descripcion}</td>
+
+                      <td>
+                        <span className={`insignia-estado ${CLASE_ESTADO[equipo.estado]}`}>{equipo.estado}</span>
+                      </td>
+
+                      <td className="pe-4">
+                        <div className="d-flex align-items-center gap-2">
+                          <select
+                            className="form-select form-select-sm"
+                            style={{ width: '9rem' }}
+                            value={equipo.estado}
+                            disabled={bloqueadoPorPrestamo}
+                            onChange={(evento) => cambiarEstado(equipo, evento.target.value)}
+                          >
+                            {bloqueadoPorPrestamo && <option value="PRESTADO">PRESTADO</option>}
+                            {ESTADOS_EDITABLES.map((estado) => (
+                              <option key={estado} value={estado}>
+                                {estado}
+                              </option>
+                            ))}
+                          </select>
+
+                          <label
+                            className={`btn btn-sm btn-outline-secondary mb-0 ${bloqueadoPorPrestamo ? 'disabled' : ''}`}
+                            title="Reemplazar imagen"
+                          >
+                            <i className="bi bi-upload"></i>
+                            <input
+                              type="file"
+                              accept="image/jpeg,image/png,image/webp"
+                              hidden
+                              disabled={bloqueadoPorPrestamo}
+                              onChange={(evento) => reemplazarImagen(equipo, evento)}
+                            />
+                          </label>
+
+                          <button
+                            className="btn btn-sm btn-outline-danger"
+                            disabled={bloqueadoPorPrestamo}
+                            title={bloqueadoPorPrestamo ? 'No se puede eliminar un equipo prestado' : 'Eliminar'}
+                            onClick={() => eliminar(equipo)}
+                          >
+                            <i className="bi bi-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </>
   );

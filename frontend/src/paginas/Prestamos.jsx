@@ -144,28 +144,34 @@ export default function Prestamos() {
 
   return (
     <>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="h4 mb-0">
-          <i className="bi bi-clipboard-check me-2"></i>
-          Módulo de Préstamos
-        </h1>
-        <ul className="nav nav-pills">
+      <div className="encabezado-pagina">
+        <div className="d-flex align-items-center gap-3">
+          <span className="icono-encabezado">
+            <i className="bi bi-arrow-left-right"></i>
+          </span>
+          <div>
+            <h1>Préstamos</h1>
+            <p>Registre préstamos de equipos y administre devoluciones</p>
+          </div>
+        </div>
+
+        <ul className="nav nav-pills gap-2">
           <li className="nav-item">
             <button
-              className={`nav-link ${pestana === 'nuevo' ? 'active' : ''}`}
+              className={`btn btn-sm ${pestana === 'nuevo' ? 'btn-primary' : 'btn-outline-secondary'}`}
               onClick={() => setPestana('nuevo')}
             >
-              <i className="bi bi-plus-circle me-1"></i>
-              Registrar Préstamo
+              <i className="bi bi-plus-lg me-1"></i>
+              Registrar préstamo
             </button>
           </li>
           <li className="nav-item">
             <button
-              className={`nav-link ${pestana === 'historial' ? 'active' : ''}`}
+              className={`btn btn-sm ${pestana === 'historial' ? 'btn-primary' : 'btn-outline-secondary'}`}
               onClick={() => setPestana('historial')}
             >
               <i className="bi bi-clock-history me-1"></i>
-              Historial y Devoluciones
+              Historial y devoluciones
             </button>
           </li>
         </ul>
@@ -196,9 +202,9 @@ export default function Prestamos() {
           )}
 
           <form onSubmit={registrarPrestamo}>
-            <div className="card mb-4">
-              <div className="card-body">
-                <label className="form-label fw-bold">ID del usuario</label>
+            <div className="superficie mb-4 aparecer">
+              <div className="p-4">
+                <label className="form-label">ID del usuario</label>
                 <input
                   className="form-control"
                   style={{ maxWidth: '12rem' }}
@@ -209,22 +215,22 @@ export default function Prestamos() {
                   required
                 />
                 <div className="form-text">
-                  Ingresa el ID del usuario que solicita el préstamo.
+                  Ingrese el ID del usuario que solicita el préstamo.
                 </div>
               </div>
             </div>
 
-            <div className="card">
-              <div className="card-body">
-                <h2 className="h6 mb-3">Equipos disponibles</h2>
+            <div className="superficie aparecer">
+              <div className="px-4 pt-4 fw-bold h6">Equipos disponibles</div>
 
+              <div className="p-4 pt-3">
                 {cargandoEquipos ? (
                   <p className="text-secondary mb-0">Cargando…</p>
                 ) : equipos.length === 0 ? (
                   <p className="text-secondary mb-0">No hay equipos disponibles en este momento.</p>
                 ) : (
                   <div className="table-responsive">
-                    <table className="table align-middle">
+                    <table className="table tabla-limpia mb-3">
                       <thead>
                         <tr>
                           <th style={{ width: '2.5rem' }}></th>
@@ -247,7 +253,7 @@ export default function Prestamos() {
                                 />
                               </td>
                               <td className="fw-semibold">{equipo.codigo}</td>
-                              <td>{equipo.descripcion}</td>
+                              <td className="text-secondary">{equipo.descripcion}</td>
                               <td>
                                 <input
                                   className="form-control form-control-sm"
@@ -265,7 +271,7 @@ export default function Prestamos() {
                   </div>
                 )}
 
-                <button className="btn btn-primary mt-3" disabled={enviando}>
+                <button className="btn btn-primary" disabled={enviando}>
                   {enviando ? 'Registrando…' : 'Registrar préstamo'}
                 </button>
               </div>
@@ -274,68 +280,65 @@ export default function Prestamos() {
         </>
       )}
 
-      {/* PESTAÑA 2: HISTORIAL Y DEVOLUCIONES (PUNTOS 19 Y 20 - DUVAN) */}
+      {/* PESTAÑA 2: HISTORIAL Y DEVOLUCIONES */}
       {pestana === 'historial' && (
         <>
-          {/* Filtros de historial */}
-          <div className="card mb-4">
-            <div className="card-body">
-              <form onSubmit={handleBuscarHistorial} className="row g-3 align-items-end">
-                <div className="col-md-3">
-                  <label className="form-label small fw-bold">Nombre o ID del usuario</label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm"
-                    name="usuario"
-                    value={filtrosHistorial.usuario}
-                    onChange={handleCambioFiltroHistorial}
-                    placeholder="Ej. Victor o ID (1, 2)"
-                  />
-                </div>
-                <div className="col-md-3">
-                  <label className="form-label small fw-bold">Fecha</label>
-                  <input
-                    type="date"
-                    className="form-control form-control-sm"
-                    name="fecha"
-                    value={filtrosHistorial.fecha}
-                    onChange={handleCambioFiltroHistorial}
-                  />
-                </div>
-                <div className="col-md-3">
-                  <label className="form-label small fw-bold">Estado del Préstamo</label>
-                  <select
-                    className="form-select form-select-sm"
-                    name="estado"
-                    value={filtrosHistorial.estado}
-                    onChange={handleCambioFiltroHistorial}
-                  >
-                    <option value="">Todos los estados</option>
-                    <option value="ACTIVO">ACTIVO</option>
-                    <option value="FINALIZADO">FINALIZADO</option>
-                  </select>
-                </div>
-                <div className="col-md-3">
-                  <label className="form-label small fw-bold">Código de Equipo</label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm"
-                    name="equipo"
-                    value={filtrosHistorial.equipo}
-                    onChange={handleCambioFiltroHistorial}
-                    placeholder="Ej. EQ-001"
-                  />
-                </div>
-                <div className="col-12 d-flex justify-content-end gap-2">
-                  <button type="button" className="btn btn-secondary btn-sm" onClick={handleLimpiarHistorial}>
-                    <i className="bi bi-x-circle me-1"></i> Limpiar
-                  </button>
-                  <button type="submit" className="btn btn-primary btn-sm">
-                    <i className="bi bi-search me-1"></i> Buscar
-                  </button>
-                </div>
-              </form>
-            </div>
+          <div className="superficie mb-4 p-4 aparecer">
+            <form onSubmit={handleBuscarHistorial} className="row g-3 align-items-end">
+              <div className="col-md-3">
+                <label className="form-label">Nombre o ID del usuario</label>
+                <input
+                  type="text"
+                  className="form-control form-control-sm"
+                  name="usuario"
+                  value={filtrosHistorial.usuario}
+                  onChange={handleCambioFiltroHistorial}
+                  placeholder="Ej. Victor o ID (1, 2)"
+                />
+              </div>
+              <div className="col-md-3">
+                <label className="form-label">Fecha</label>
+                <input
+                  type="date"
+                  className="form-control form-control-sm"
+                  name="fecha"
+                  value={filtrosHistorial.fecha}
+                  onChange={handleCambioFiltroHistorial}
+                />
+              </div>
+              <div className="col-md-3">
+                <label className="form-label">Estado del préstamo</label>
+                <select
+                  className="form-select form-select-sm"
+                  name="estado"
+                  value={filtrosHistorial.estado}
+                  onChange={handleCambioFiltroHistorial}
+                >
+                  <option value="">Todos los estados</option>
+                  <option value="ACTIVO">ACTIVO</option>
+                  <option value="FINALIZADO">FINALIZADO</option>
+                </select>
+              </div>
+              <div className="col-md-3">
+                <label className="form-label">Código de equipo</label>
+                <input
+                  type="text"
+                  className="form-control form-control-sm"
+                  name="equipo"
+                  value={filtrosHistorial.equipo}
+                  onChange={handleCambioFiltroHistorial}
+                  placeholder="Ej. EQ-001"
+                />
+              </div>
+              <div className="col-12 d-flex justify-content-end gap-2">
+                <button type="button" className="btn btn-outline-secondary btn-sm" onClick={handleLimpiarHistorial}>
+                  <i className="bi bi-x-lg me-1"></i> Limpiar
+                </button>
+                <button type="submit" className="btn btn-primary btn-sm">
+                  <i className="bi bi-search me-1"></i> Buscar
+                </button>
+              </div>
+            </form>
           </div>
 
           {errorHistorial && <div className="alert alert-danger">{errorHistorial}</div>}
@@ -350,19 +353,15 @@ export default function Prestamos() {
                 const tienePendientes = item.detalle.some((d) => d.estado_devolucion === 'PENDIENTE');
 
                 return (
-                  <div key={item.id} className="card shadow-sm">
-                    <div className="card-header bg-light d-flex justify-content-between align-items-center">
+                  <div key={item.id} className="superficie aparecer">
+                    <div className="d-flex justify-content-between align-items-center px-4 py-3" style={{ borderBottom: '1px solid var(--color-border)' }}>
                       <div>
                         <strong className="me-2">{item.numero}</strong>
-                        <span
-                          className={`badge ${
-                            item.estado === 'ACTIVO' ? 'bg-warning text-dark' : 'bg-secondary'
-                          }`}
-                        >
+                        <span className={`insignia-estado ${item.estado === 'ACTIVO' ? 'insignia-ambar' : 'insignia-gris'} me-2`}>
                           {item.estado}
                         </span>
-                        <small className="text-muted ms-3">
-                          Usuario: <strong>{item.usuario}</strong> | Encargado: {item.encargado} | Fecha:{' '}
+                        <small className="text-secondary">
+                          Usuario: <strong>{item.usuario}</strong> · Encargado: {item.encargado} · Fecha:{' '}
                           {new Date(item.fecha).toLocaleString('es-CR')}
                         </small>
                       </div>
@@ -371,54 +370,52 @@ export default function Prestamos() {
                           className="btn btn-sm btn-outline-danger"
                           onClick={() => devolverPrestamoCompleto(item.id)}
                         >
-                          <i className="bi bi-box-arrow-in-left me-1"></i> Devolver Todo
+                          <i className="bi bi-box-arrow-in-left me-1"></i> Devolver todo
                         </button>
                       )}
                     </div>
-                    <div className="card-body p-0">
-                      <div className="table-responsive">
-                        <table className="table table-sm align-middle mb-0">
-                          <thead>
-                            <tr className="table-light">
-                              <th style={{ width: '15%' }}>Código Equipo</th>
-                              <th style={{ width: '35%' }}>Descripción / Nota</th>
-                              <th style={{ width: '20%' }}>Estado Devolución</th>
-                              <th style={{ width: '15%' }}>Fecha Devolución</th>
-                              <th style={{ width: '15%' }} className="text-end">Acción</th>
+                    <div className="table-responsive">
+                      <table className="table tabla-limpia mb-0">
+                        <thead>
+                          <tr>
+                            <th className="ps-4" style={{ width: '15%' }}>Código</th>
+                            <th style={{ width: '35%' }}>Descripción / Nota</th>
+                            <th style={{ width: '20%' }}>Estado</th>
+                            <th style={{ width: '15%' }}>Fecha devolución</th>
+                            <th style={{ width: '15%' }} className="text-end pe-4">Acción</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {item.detalle.map((d) => (
+                            <tr key={d.id}>
+                              <td className="ps-4 fw-semibold">{d.codigo}</td>
+                              <td className="text-secondary">{d.nota || d.descripcion_equipo || '—'}</td>
+                              <td>
+                                {d.estado_devolucion === 'PENDIENTE' ? (
+                                  <span className="insignia-estado insignia-ambar">PENDIENTE</span>
+                                ) : (
+                                  <span className="insignia-estado insignia-verde">DEVUELTO</span>
+                                )}
+                              </td>
+                              <td className="text-secondary">
+                                {d.fecha_devolucion
+                                  ? new Date(d.fecha_devolucion).toLocaleString('es-CR')
+                                  : '—'}
+                              </td>
+                              <td className="text-end pe-4">
+                                {d.estado_devolucion === 'PENDIENTE' && (
+                                  <button
+                                    className="btn btn-sm btn-outline-primary py-0"
+                                    onClick={() => devolverEquipoIndividual(item.id, d.id_equipo)}
+                                  >
+                                    Devolver
+                                  </button>
+                                )}
+                              </td>
                             </tr>
-                          </thead>
-                          <tbody>
-                            {item.detalle.map((d) => (
-                              <tr key={d.id}>
-                                <td className="fw-semibold">{d.codigo}</td>
-                                <td>{d.nota || d.descripcion_equipo || '—'}</td>
-                                <td>
-                                  {d.estado_devolucion === 'PENDIENTE' ? (
-                                    <span className="badge bg-warning text-dark">PENDIENTE</span>
-                                  ) : (
-                                    <span className="badge bg-success">DEVUELTO</span>
-                                  )}
-                                </td>
-                                <td>
-                                  {d.fecha_devolucion
-                                    ? new Date(d.fecha_devolucion).toLocaleString('es-CR')
-                                    : '—'}
-                                </td>
-                                <td className="text-end">
-                                  {d.estado_devolucion === 'PENDIENTE' && (
-                                    <button
-                                      className="btn btn-sm btn-outline-primary py-0"
-                                      onClick={() => devolverEquipoIndividual(item.id, d.id_equipo)}
-                                    >
-                                      Devolver
-                                    </button>
-                                  )}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 );

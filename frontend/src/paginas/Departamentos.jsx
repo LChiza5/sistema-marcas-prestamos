@@ -100,18 +100,23 @@ export default function Departamentos() {
 
   return (
     <>
-      <div className="mb-4">
-        <h1 className="h4 mb-1">
-          <i className="bi bi-building me-2"></i>
-          Departamentos o carreras
-        </h1>
-        <p className="text-secondary mb-0">
-          Administración de los departamentos disponibles en el sistema.
-        </p>
+      <div className="encabezado-pagina">
+        <div className="d-flex align-items-center gap-3">
+          <span className="icono-encabezado">
+            <i className="bi bi-diagram-3"></i>
+          </span>
+          <div>
+            <h1>Departamentos o carreras</h1>
+            <p>Administración de los departamentos disponibles en el sistema</p>
+          </div>
+        </div>
       </div>
 
       {mensajeExito && (
-        <div className="alert alert-success">{mensajeExito}</div>
+        <div className="alert alert-success d-flex align-items-center gap-2">
+          <i className="bi bi-check-circle-fill"></i>
+          {mensajeExito}
+        </div>
       )}
 
       {errores.length > 0 && (
@@ -124,12 +129,12 @@ export default function Departamentos() {
         </div>
       )}
 
-      <div className="card mb-4">
-        <div className="card-header fw-semibold">
+      <div className="superficie mb-4 aparecer">
+        <div className="px-4 pt-4 fw-semibold">
           {idEdicion ? 'Modificar departamento' : 'Registrar departamento'}
         </div>
 
-        <div className="card-body">
+        <div className="p-4">
           <form onSubmit={guardar}>
             <div className="row g-3">
               <div className="col-md-4">
@@ -166,7 +171,7 @@ export default function Departamentos() {
 
               <div className="col-12 d-flex gap-2">
                 <button className="btn btn-primary" disabled={enviando}>
-                  <i className={`bi ${idEdicion ? 'bi-floppy' : 'bi-plus-circle'} me-1`}></i>
+                  <i className={`bi ${idEdicion ? 'bi-check-lg' : 'bi-plus-lg'} me-1`}></i>
                   {enviando
                     ? 'Guardando…'
                     : idEdicion
@@ -190,60 +195,55 @@ export default function Departamentos() {
         </div>
       </div>
 
-      <div className="card">
-        <div className="card-body p-0">
-          {cargando ? (
-            <p className="text-secondary p-3 mb-0">Cargando departamentos…</p>
-          ) : departamentos.length === 0 ? (
-            <p className="text-secondary p-3 mb-0">
-              No hay departamentos registrados.
-            </p>
-          ) : (
-            <div className="table-responsive">
-              <table className="table table-hover align-middle mb-0">
-                <thead className="table-light">
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Encargado</th>
-                    <th className="text-end">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {departamentos.map((departamento) => (
-                    <tr key={departamento.id}>
-                      <td className="fw-semibold">{departamento.nombre}</td>
-                      <td>{departamento.descripcion || '—'}</td>
-                      <td>{departamento.encargado || '—'}</td>
-                      <td className="text-end">
-                        <div className="btn-group btn-group-sm">
-                          <button
-                            className="btn btn-outline-primary"
-                            onClick={() => seleccionarEdicion(departamento)}
-                          >
-                            <i className="bi bi-pencil me-1"></i>
-                            Editar
-                          </button>
+      <div className="superficie aparecer">
+        {cargando ? (
+          <p className="text-secondary p-4 mb-0">Cargando departamentos…</p>
+        ) : departamentos.length === 0 ? (
+          <p className="text-secondary p-4 mb-0">No hay departamentos registrados.</p>
+        ) : (
+          <div className="table-responsive">
+            <table className="table tabla-limpia mb-0">
+              <thead>
+                <tr>
+                  <th className="ps-4">Nombre</th>
+                  <th>Descripción</th>
+                  <th>Encargado</th>
+                  <th className="text-end pe-4">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {departamentos.map((departamento) => (
+                  <tr key={departamento.id}>
+                    <td className="ps-4 fw-semibold">{departamento.nombre}</td>
+                    <td className="text-secondary">{departamento.descripcion || '—'}</td>
+                    <td className="text-secondary">{departamento.encargado || '—'}</td>
+                    <td className="text-end pe-4">
+                      <div className="btn-group btn-group-sm">
+                        <button
+                          className="btn btn-outline-primary"
+                          onClick={() => seleccionarEdicion(departamento)}
+                        >
+                          <i className="bi bi-pencil"></i>
+                        </button>
 
-                          <button
-                            className="btn btn-outline-danger"
-                            onClick={() => eliminar(departamento)}
-                          >
-                            <i className="bi bi-trash me-1"></i>
-                            Eliminar
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+                        <button
+                          className="btn btn-outline-danger"
+                          onClick={() => eliminar(departamento)}
+                        >
+                          <i className="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       <p className="text-secondary small mt-3">
+        <i className="bi bi-info-circle me-1"></i>
         Un departamento con usuarios asociados no puede eliminarse.
       </p>
     </>

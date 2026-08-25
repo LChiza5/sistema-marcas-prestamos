@@ -108,185 +108,178 @@ export default function Reportes() {
 
   return (
     <>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="h4 mb-0">
-          <i className="bi bi-file-earmark-text me-2"></i>
-          Reporte de Marcas
-        </h1>
+      <div className="encabezado-pagina">
+        <div className="d-flex align-items-center gap-3">
+          <span className="icono-encabezado">
+            <i className="bi bi-bar-chart-line"></i>
+          </span>
+          <div>
+            <h1>Reporte de marcas</h1>
+            <p>Consulte, filtre y exporte las marcas registradas</p>
+          </div>
+        </div>
+
         <div className="btn-group">
           <button className="btn btn-outline-secondary btn-sm" onClick={() => exportar('json')}>
-            <i className="bi bi-filetype-json me-1"></i> Exportar JSON
+            <i className="bi bi-filetype-json me-1"></i> JSON
           </button>
           <button className="btn btn-outline-secondary btn-sm" onClick={() => exportar('xml')}>
-            <i className="bi bi-filetype-xml me-1"></i> Exportar XML
+            <i className="bi bi-filetype-xml me-1"></i> XML
           </button>
           <button className="btn btn-outline-danger btn-sm" onClick={() => exportar('pdf')}>
-            <i className="bi bi-filetype-pdf me-1"></i> Exportar PDF
+            <i className="bi bi-filetype-pdf me-1"></i> PDF
           </button>
         </div>
       </div>
 
-      {/* Formulario de Filtros */}
-      <div className="card mb-4">
-        <div className="card-body">
-          <form onSubmit={handleBuscar} className="row g-3 align-items-end">
-            <div className="col-md-3">
-              <label className="form-label small fw-bold">Usuario</label>
-              <select
-                className="form-select form-select-sm"
-                name="usuario"
-                value={filtros.usuario}
-                onChange={handleCambioFiltro}
-              >
-                <option value="">Todos los usuarios</option>
-                {usuarios.map((u) => (
-                  <option key={u.id} value={u.id}>
-                    {u.nombre_completo} ({u.usuario})
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="col-md-2">
-              <label className="form-label small fw-bold">Año</label>
-              <input
-                type="number"
-                className="form-control form-control-sm"
-                name="anio"
-                value={filtros.anio}
-                onChange={handleCambioFiltro}
-                placeholder="Ej. 2026"
-              />
-            </div>
-            <div className="col-md-2">
-              <label className="form-label small fw-bold">Mes</label>
-              <select
-                className="form-select form-select-sm"
-                name="mes"
-                value={filtros.mes}
-                onChange={handleCambioFiltro}
-              >
-                <option value="">Todos los meses</option>
-                <option value="1">Enero</option>
-                <option value="2">Febrero</option>
-                <option value="3">Marzo</option>
-                <option value="4">Abril</option>
-                <option value="5">Mayo</option>
-                <option value="6">Junio</option>
-                <option value="7">Julio</option>
-                <option value="8">Agosto</option>
-                <option value="9">Septiembre</option>
-                <option value="10">Octubre</option>
-                <option value="11">Noviembre</option>
-                <option value="12">Diciembre</option>
-              </select>
-            </div>
-            <div className="col-md-2">
-              <label className="form-label small fw-bold">Día</label>
-              <input
-                type="number"
-                min="1"
-                max="31"
-                className="form-control form-control-sm"
-                name="dia"
-                value={filtros.dia}
-                onChange={handleCambioFiltro}
-                placeholder="1 - 31"
-              />
-            </div>
-            <div className="col-md-3">
-              <label className="form-label small fw-bold">Departamento</label>
-              <select
-                className="form-select form-select-sm"
-                name="departamento"
-                value={filtros.departamento}
-                onChange={handleCambioFiltro}
-              >
-                <option value="">Todos los departamentos</option>
-                {departamentos.map((dep) => (
-                  <option key={dep.id} value={dep.id}>
-                    {dep.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="col-12 d-flex justify-content-end gap-2 mt-3">
-              <button type="button" className="btn btn-secondary btn-sm" onClick={handleLimpiar}>
-                <i className="bi bi-x-circle me-1"></i> Limpiar
-              </button>
-              <button type="submit" className="btn btn-primary btn-sm">
-                <i className="bi bi-search me-1"></i> Filtrar
-              </button>
-            </div>
-          </form>
-        </div>
+      {/* Formulario de filtros */}
+      <div className="superficie mb-4 p-4 aparecer">
+        <form onSubmit={handleBuscar} className="row g-3 align-items-end">
+          <div className="col-md-3">
+            <label className="form-label">Usuario</label>
+            <select
+              className="form-select form-select-sm"
+              name="usuario"
+              value={filtros.usuario}
+              onChange={handleCambioFiltro}
+            >
+              <option value="">Todos los usuarios</option>
+              {usuarios.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.nombre_completo} ({u.usuario})
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="col-md-2">
+            <label className="form-label">Año</label>
+            <input
+              type="number"
+              className="form-control form-control-sm"
+              name="anio"
+              value={filtros.anio}
+              onChange={handleCambioFiltro}
+              placeholder="Ej. 2026"
+            />
+          </div>
+          <div className="col-md-2">
+            <label className="form-label">Mes</label>
+            <select
+              className="form-select form-select-sm"
+              name="mes"
+              value={filtros.mes}
+              onChange={handleCambioFiltro}
+            >
+              <option value="">Todos los meses</option>
+              <option value="1">Enero</option>
+              <option value="2">Febrero</option>
+              <option value="3">Marzo</option>
+              <option value="4">Abril</option>
+              <option value="5">Mayo</option>
+              <option value="6">Junio</option>
+              <option value="7">Julio</option>
+              <option value="8">Agosto</option>
+              <option value="9">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+            </select>
+          </div>
+          <div className="col-md-2">
+            <label className="form-label">Día</label>
+            <input
+              type="number"
+              min="1"
+              max="31"
+              className="form-control form-control-sm"
+              name="dia"
+              value={filtros.dia}
+              onChange={handleCambioFiltro}
+              placeholder="1 - 31"
+            />
+          </div>
+          <div className="col-md-3">
+            <label className="form-label">Departamento</label>
+            <select
+              className="form-select form-select-sm"
+              name="departamento"
+              value={filtros.departamento}
+              onChange={handleCambioFiltro}
+            >
+              <option value="">Todos los departamentos</option>
+              {departamentos.map((dep) => (
+                <option key={dep.id} value={dep.id}>
+                  {dep.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="col-12 d-flex justify-content-end gap-2 mt-3">
+            <button type="button" className="btn btn-outline-secondary btn-sm" onClick={handleLimpiar}>
+              <i className="bi bi-x-lg me-1"></i> Limpiar
+            </button>
+            <button type="submit" className="btn btn-primary btn-sm">
+              <i className="bi bi-search me-1"></i> Filtrar
+            </button>
+          </div>
+        </form>
       </div>
 
-      {/* Tabla de Resultados */}
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <div className="card">
-        <div className="card-body p-0">
-          {cargando ? (
-            <p className="text-secondary p-3 mb-0">Cargando reporte…</p>
-          ) : marcas.length === 0 ? (
-            <p className="text-secondary p-3 mb-0">No se encontraron marcas con los filtros especificados.</p>
-          ) : (
-            <div className="table-responsive">
-              <table className="table table-hover align-middle mb-0">
-                <thead className="table-light">
-                  <tr>
-                    <th>Usuario</th>
-                    <th>Departamento</th>
-                    <th>Fecha</th>
-                    <th>Hora Entrada</th>
-                    <th>Hora Salida</th>
-                    <th>Dispositivo (E / S)</th>
-                    <th>IP (E / S)</th>
+      <div className="superficie aparecer">
+        {cargando ? (
+          <p className="text-secondary p-4 mb-0">Cargando reporte…</p>
+        ) : marcas.length === 0 ? (
+          <p className="text-secondary p-4 mb-0">No se encontraron marcas con los filtros especificados.</p>
+        ) : (
+          <div className="table-responsive">
+            <table className="table tabla-limpia mb-0">
+              <thead>
+                <tr>
+                  <th className="ps-4">Usuario</th>
+                  <th>Departamento</th>
+                  <th>Fecha</th>
+                  <th>Hora entrada</th>
+                  <th>Hora salida</th>
+                  <th>Dispositivo (E / S)</th>
+                  <th className="pe-4">IP (E / S)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {marcas.map((row, index) => (
+                  <tr key={`${row.id_usuario}-${row.fecha}-${index}`}>
+                    <td className="ps-4 fw-semibold">{row.usuario}</td>
+                    <td className="text-secondary">{row.departamento || '—'}</td>
+                    <td className="text-secondary">{row.fecha}</td>
+                    <td>
+                      {row.hora_entrada ? (
+                        <span className="insignia-estado insignia-verde">{row.hora_entrada}</span>
+                      ) : (
+                        <span className="text-secondary">—</span>
+                      )}
+                    </td>
+                    <td>
+                      {row.hora_salida ? (
+                        <span className="insignia-estado insignia-ambar">{row.hora_salida}</span>
+                      ) : (
+                        <span className="text-secondary">—</span>
+                      )}
+                    </td>
+                    <td>
+                      <small className="d-block text-secondary">In: {row.dispositivo_entrada || '—'}</small>
+                      <small className="d-block text-secondary">Out: {row.dispositivo_salida || '—'}</small>
+                    </td>
+                    <td className="pe-4">
+                      <small className="d-block text-secondary">In: {row.ip_entrada || '—'}</small>
+                      <small className="d-block text-secondary">Out: {row.ip_salida || '—'}</small>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {marcas.map((row, index) => (
-                    <tr key={`${row.id_usuario}-${row.fecha}-${index}`}>
-                      <td className="fw-semibold">{row.usuario}</td>
-                      <td>{row.departamento || '—'}</td>
-                      <td>{row.fecha}</td>
-                      <td>
-                        {row.hora_entrada ? (
-                          <span className="badge bg-success-subtle text-success border border-success">
-                            {row.hora_entrada}
-                          </span>
-                        ) : (
-                          '—'
-                        )}
-                      </td>
-                      <td>
-                        {row.hora_salida ? (
-                          <span className="badge bg-danger-subtle text-danger border border-danger">
-                            {row.hora_salida}
-                          </span>
-                        ) : (
-                          '—'
-                        )}
-                      </td>
-                      <td>
-                        <small className="d-block text-body-secondary">
-                          In: {row.dispositivo_entrada || '—'}
-                        </small>
-                        <small className="d-block text-body-secondary">
-                          Out: {row.dispositivo_salida || '—'}
-                        </small>
-                      </td>
-                      <td>
-                        <small className="d-block text-mono">In: {row.ip_entrada || '—'}</small>
-                        <small className="d-block text-mono">Out: {row.ip_salida || '—'}</small>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </>
   );
