@@ -9,7 +9,12 @@ export default function RutaProtegida({ children, soloAdministrador = false }) {
   const { usuario, cargando, esAdministrador } = useAuth();
 
   if (cargando) {
-    return <div className="container py-5 text-center text-secondary">Cargando…</div>;
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center gap-3 text-secondary" style={{ minHeight: '100vh' }}>
+        <span className="spinner-border" style={{ color: 'var(--color-primary)' }}></span>
+        Cargando…
+      </div>
+    );
   }
 
   if (!usuario) return <Navigate to="/login" replace />;

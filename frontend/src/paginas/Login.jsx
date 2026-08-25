@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
+import SelectorTema from '../componentes/SelectorTema.jsx';
 
 /** Punto 2 — Inicio de sesión. */
 export default function Login() {
@@ -32,50 +33,89 @@ export default function Login() {
   }
 
   return (
-    <div className="container py-5" style={{ maxWidth: '26rem' }}>
-      <h1 className="h4 mb-4 text-center">Iniciar sesión</h1>
+    <div className="envoltorio-publico">
+      <SelectorTema className="selector-tema-flotante" />
 
-      {mensajeError && <div className="alert alert-danger">{mensajeError}</div>}
-
-      <form onSubmit={enviar}>
-        <div className="mb-3">
-          <label className="form-label">Usuario o correo</label>
-          <input
-            className="form-control"
-            name="identificador"
-            value={datos.identificador}
-            onChange={cambiar}
-            required
-          />
+      <div className="tarjeta-publica aparecer" style={{ maxWidth: '26rem' }}>
+        <div className="marca-app">
+          <span className="icono">
+            <i className="bi bi-clipboard2-check-fill"></i>
+          </span>
+          <span className="texto">
+            <small>Sistema institucional</small>
+            Marcas y Préstamos
+          </span>
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Contraseña</label>
-          <input
-            className="form-control"
-            type="password"
-            name="password"
-            value={datos.password}
-            onChange={cambiar}
-            required
-          />
-        </div>
+        <h1 className="h5 mb-1 text-center fw-bold">Bienvenido de nuevo</h1>
+        <p className="text-center text-secondary small mb-4">
+          Ingresa tus credenciales para continuar
+        </p>
 
-        <button className="btn btn-primary w-100" disabled={enviando}>
-          {enviando ? 'Ingresando…' : 'Ingresar'}
-        </button>
-      </form>
+        {mensajeError && (
+          <div className="alert alert-danger d-flex align-items-center gap-2 py-2 small">
+            <i className="bi bi-exclamation-circle-fill"></i>
+            {mensajeError}
+          </div>
+        )}
 
-      <p className="text-center mt-3 mb-0 small">
-        ¿No tiene cuenta? <Link to="/registro">Registrarse</Link>
-      </p>
+        <form onSubmit={enviar}>
+          <div className="mb-3">
+            <label className="form-label">Usuario o correo</label>
+            <div className="input-group">
+              <span className="input-group-text bg-white border-end-0 text-secondary">
+                <i className="bi bi-person"></i>
+              </span>
+              <input
+                className="form-control border-start-0"
+                name="identificador"
+                value={datos.identificador}
+                onChange={cambiar}
+                autoFocus
+                required
+              />
+            </div>
+          </div>
 
-      {/* TODO (punto 6): agregar el enlace de recuperación de contraseña. */}
+          <div className="mb-2">
+            <label className="form-label">Contraseña</label>
+            <div className="input-group">
+              <span className="input-group-text bg-white border-end-0 text-secondary">
+                <i className="bi bi-lock"></i>
+              </span>
+              <input
+                className="form-control border-start-0"
+                type="password"
+                name="password"
+                value={datos.password}
+                onChange={cambiar}
+                required
+              />
+            </div>
+          </div>
 
-      <p className="text-center mt-3 mb-0 small">
-              <Link to="/recuperar-contrasena">¿Olvidó su contraseña?</Link>
-      </p>
+          <div className="text-end mb-3">
+            <Link to="/recuperar-contrasena" className="small">
+              ¿Olvidó su contraseña?
+            </Link>
+          </div>
 
+          <button className="btn btn-primary w-100 py-2" disabled={enviando}>
+            {enviando ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2"></span>
+                Ingresando…
+              </>
+            ) : (
+              'Ingresar'
+            )}
+          </button>
+        </form>
+
+        <p className="text-center mt-4 mb-0 small text-secondary">
+          ¿No tiene cuenta? <Link to="/registro" className="fw-semibold">Regístrese aquí</Link>
+        </p>
+      </div>
     </div>
   );
 }
