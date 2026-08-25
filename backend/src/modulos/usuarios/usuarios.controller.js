@@ -126,6 +126,9 @@ export async function cambiarPassword(req, res, next) {
       passwordHash
     );
 
+    // Cerrar las demás sesiones activas por seguridad
+    await modelo.eliminarSesionesUsuario(req.session.usuario.id, req.sessionID);
+
     return exito(
       res,
       null,
@@ -251,6 +254,8 @@ export async function restablecerPassword(req, res, next) {
     );
 
     await modelo.marcarTokenUsado(registroToken.id);
+
+    await modelo.eliminarSesionesUsuario(registroToken.id_usuario);
 
     return exito(
       res,

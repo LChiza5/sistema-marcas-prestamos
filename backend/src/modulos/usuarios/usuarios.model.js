@@ -129,3 +129,21 @@ export async function marcarTokenUsado(id) {
     [id]
   );
 }
+
+/**
+ * Elimina las sesiones activas de un usuario de la tabla de sesiones.
+ * Si se pasa sessionIdActual, se excluye esa sesión (para no cerrar la propia).
+ */
+export async function eliminarSesionesUsuario(idUsuario, sessionIdActual = null) {
+  if (sessionIdActual) {
+    await pool.query(
+      'DELETE FROM sesiones WHERE id_usuario = ? AND session_id != ?',
+      [idUsuario, sessionIdActual]
+    );
+  } else {
+    await pool.query(
+      'DELETE FROM sesiones WHERE id_usuario = ?',
+      [idUsuario]
+    );
+  }
+}
