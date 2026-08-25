@@ -4,6 +4,10 @@
 -- Se ejecuta automáticamente al levantar el contenedor de MySQL.
 -- =====================================================================
 
+-- Sin esto, el cliente que ejecuta este script al iniciar el contenedor
+-- corrompe los caracteres acentuados (á, é, í, ó, ú, ñ) de los INSERT.
+SET NAMES utf8mb4;
+
 CREATE DATABASE IF NOT EXISTS marcas_prestamos
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;

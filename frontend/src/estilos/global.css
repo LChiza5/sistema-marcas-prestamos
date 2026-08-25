@@ -1,0 +1,573 @@
+/* =====================================================================
+   Sistema de diseño — Marcas y Préstamos
+   Tokens de color (claro/oscuro), tipografía y componentes reutilizables
+   construidos sobre Bootstrap 5. Cambia de tema con [data-bs-theme].
+   ===================================================================== */
+
+:root {
+  --color-primary: #23336b;
+  --color-primary-dark: #17204a;
+  --color-primary-light: #3d55a8;
+  --color-accent: #e0863a;
+  --color-accent-dark: #c06b22;
+  --color-accent-soft: #f4a35f;
+
+  --color-bg: #f2f4fa;
+  --color-surface: #ffffff;
+  --color-surface-2: #f8f9fd;
+  --color-text: #1c2333;
+  --color-text-muted: #667089;
+  --color-border: #e2e6f0;
+
+  --color-success: #1e8e5a;
+  --color-danger: #d64545;
+  --color-warning: #c9821a;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+
+  --shadow-sm: 0 1px 2px rgba(23, 32, 74, 0.07), 0 1px 1px rgba(23, 32, 74, 0.04);
+  --shadow-md: 0 10px 28px rgba(23, 32, 74, 0.09), 0 2px 8px rgba(23, 32, 74, 0.06);
+  --shadow-lg: 0 24px 56px rgba(23, 32, 74, 0.16);
+  --glow-accent: 0 0 0 rgba(224, 134, 58, 0);
+
+  --font-sans: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --textura-app:
+    radial-gradient(circle at 8% 8%, rgba(35, 51, 107, 0.09), transparent 42%),
+    radial-gradient(circle at 92% 0%, rgba(224, 134, 58, 0.10), transparent 38%),
+    radial-gradient(circle at 100% 92%, rgba(35, 51, 107, 0.06), transparent 40%);
+
+  /* Reasignación de las variables de Bootstrap al tema institucional */
+  --bs-primary: var(--color-primary);
+  --bs-primary-rgb: 35, 51, 107;
+  --bs-body-bg: var(--color-bg);
+  --bs-body-color: var(--color-text);
+  --bs-body-font-family: var(--font-sans);
+  --bs-border-radius: var(--radius-sm);
+  --bs-border-radius-lg: var(--radius-md);
+  --bs-link-color: var(--color-primary);
+  --bs-link-hover-color: var(--color-primary-dark);
+  --bs-border-color: var(--color-border);
+}
+
+/* --------------------------------------------------------------------
+   Modo oscuro — se activa con <html data-bs-theme="dark">
+   -------------------------------------------------------------------- */
+[data-bs-theme='dark'] {
+  --color-primary: #5b7fd8;
+  --color-primary-dark: #4363b8;
+  --color-primary-light: #7f9ce6;
+  --color-accent: #eb9950;
+  --color-accent-dark: #d47f34;
+  --color-accent-soft: #f2b57c;
+
+  --color-bg: #0e1526;
+  --color-surface: #161f37;
+  --color-surface-2: #1b2544;
+  --color-text: #e8ecf6;
+  --color-text-muted: #8d97b7;
+  --color-border: #2a355a;
+
+  --color-success: #3fd18f;
+  --color-danger: #ff7373;
+  --color-warning: #f0b24d;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35), 0 1px 1px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.55);
+
+  --textura-app:
+    radial-gradient(circle at 8% 8%, rgba(91, 127, 216, 0.14), transparent 42%),
+    radial-gradient(circle at 92% 0%, rgba(235, 153, 80, 0.12), transparent 38%),
+    radial-gradient(circle at 100% 92%, rgba(91, 127, 216, 0.10), transparent 40%);
+
+  --bs-body-bg: var(--color-bg);
+  --bs-body-color: var(--color-text);
+  --bs-border-color: var(--color-border);
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background:
+    var(--textura-app),
+    var(--color-bg);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* --------------------------------------------------------------------
+   Botones
+   -------------------------------------------------------------------- */
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  --bs-btn-border-color: var(--color-primary);
+  --bs-btn-hover-bg: var(--color-primary-dark);
+  --bs-btn-hover-border-color: var(--color-primary-dark);
+  --bs-btn-active-bg: var(--color-primary-dark);
+  --bs-btn-active-border-color: var(--color-primary-dark);
+  --bs-btn-disabled-bg: var(--color-primary);
+  --bs-btn-disabled-border-color: var(--color-primary);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--color-primary);
+  --bs-btn-border-color: var(--color-primary);
+  --bs-btn-hover-bg: var(--color-primary);
+  --bs-btn-hover-border-color: var(--color-primary);
+  font-weight: 600;
+}
+
+.btn {
+  border-radius: var(--radius-sm);
+}
+
+.btn-selector-tema {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: color 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-selector-tema:hover {
+  color: var(--color-accent-dark);
+  border-color: var(--color-accent);
+  transform: rotate(-12deg);
+}
+
+.navegacion-app .btn-selector-tema {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.navegacion-app .btn-selector-tema:hover {
+  color: var(--color-accent-soft);
+  border-color: var(--color-accent-soft);
+}
+
+/* --------------------------------------------------------------------
+   Tarjetas y superficies
+   -------------------------------------------------------------------- */
+.superficie {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.superficie-elevada {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.superficie-elevada::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+}
+
+/* --------------------------------------------------------------------
+   Formularios
+   -------------------------------------------------------------------- */
+.form-control,
+.form-select {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+  border-radius: var(--radius-sm);
+  padding-block: 0.55rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0 0 0.2rem rgba(35, 51, 107, 0.16);
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.input-group-text {
+  background-color: var(--color-surface-2) !important;
+  color: var(--color-text-muted) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* --------------------------------------------------------------------
+   Encabezado de página
+   -------------------------------------------------------------------- */
+.encabezado-pagina {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.encabezado-pagina h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  margin-bottom: 0.15rem;
+}
+
+.encabezado-pagina p {
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+}
+
+.icono-encabezado {
+  width: 2.85rem;
+  height: 2.85rem;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  box-shadow: var(--shadow-sm);
+}
+
+/* --------------------------------------------------------------------
+   Tablas
+   -------------------------------------------------------------------- */
+.tabla-limpia {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--color-text);
+  margin-bottom: 0;
+}
+
+.tabla-limpia thead th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  font-weight: 700;
+  border-bottom-width: 1px;
+  border-color: var(--color-border);
+  padding-block: 0.85rem;
+}
+
+.tabla-limpia tbody td {
+  padding-block: 0.85rem;
+  border-color: var(--color-border);
+  vertical-align: middle;
+  color: var(--color-text);
+}
+
+.tabla-limpia tbody tr:hover {
+  background: color-mix(in srgb, var(--color-primary) 5%, transparent);
+}
+
+/* --------------------------------------------------------------------
+   Insignias de estado
+   -------------------------------------------------------------------- */
+.insignia-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.32rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.insignia-estado::before {
+  content: '';
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 20%, transparent);
+}
+
+.insignia-verde {
+  background: color-mix(in srgb, var(--color-success) 14%, var(--color-surface));
+  color: var(--color-success);
+}
+
+.insignia-ambar {
+  background: color-mix(in srgb, var(--color-warning) 16%, var(--color-surface));
+  color: var(--color-warning);
+}
+
+.insignia-roja {
+  background: color-mix(in srgb, var(--color-danger) 14%, var(--color-surface));
+  color: var(--color-danger);
+}
+
+.insignia-gris {
+  background: color-mix(in srgb, var(--color-text-muted) 16%, var(--color-surface));
+  color: var(--color-text-muted);
+}
+
+.insignia-azul {
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface));
+  color: var(--color-primary);
+}
+
+/* --------------------------------------------------------------------
+   Pantallas públicas (login, registro, recuperación)
+   -------------------------------------------------------------------- */
+.envoltorio-publico {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+}
+
+.envoltorio-publico .selector-tema-flotante {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+}
+
+.tarjeta-publica {
+  width: 100%;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.tarjeta-publica::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+}
+
+.marca-app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-bottom: 1.75rem;
+}
+
+.marca-app .icono {
+  width: 2.85rem;
+  height: 2.85rem;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.marca-app .texto {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--color-text);
+  line-height: 1.15;
+}
+
+.marca-app .texto small {
+  display: block;
+  font-weight: 700;
+  font-size: 0.68rem;
+  color: var(--color-accent-dark);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------
+   Navegación autenticada
+   -------------------------------------------------------------------- */
+.navegacion-app {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+.navegacion-app::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-accent-soft), transparent);
+  opacity: 0.7;
+}
+
+.navegacion-app .navbar-brand {
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navegacion-app .nav-link {
+  color: rgba(255, 255, 255, 0.75) !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.85rem !important;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.navegacion-app .nav-link:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.navegacion-app .nav-link.activo {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.avatar-usuario {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.18);
+}
+
+/* --------------------------------------------------------------------
+   Tarjetas de acceso del panel principal
+   -------------------------------------------------------------------- */
+.tarjeta-acceso {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.4rem;
+  height: 100%;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.tarjeta-acceso:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary-light);
+}
+
+.tarjeta-acceso .icono {
+  flex-shrink: 0;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+}
+
+.tarjeta-acceso h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 0.2rem;
+}
+
+.tarjeta-acceso p {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+}
+
+/* Utilidad genérica para pintar el ícono de cada tarjeta con degradado propio */
+.icono-azul { background: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 16%, var(--color-surface)), color-mix(in srgb, var(--color-primary) 8%, var(--color-surface))); color: var(--color-primary); }
+.icono-ambar { background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 20%, var(--color-surface)), color-mix(in srgb, var(--color-accent) 8%, var(--color-surface))); color: var(--color-accent-dark); }
+.icono-verde { background: linear-gradient(135deg, color-mix(in srgb, var(--color-success) 18%, var(--color-surface)), color-mix(in srgb, var(--color-success) 8%, var(--color-surface))); color: var(--color-success); }
+.icono-morado { background: linear-gradient(135deg, color-mix(in srgb, #7c5cff 18%, var(--color-surface)), color-mix(in srgb, #7c5cff 8%, var(--color-surface))); color: #7c5cff; }
+
+/* --------------------------------------------------------------------
+   Animación sutil de entrada
+   -------------------------------------------------------------------- */
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.aparecer {
+  animation: aparecer 0.35s ease both;
+}
+
+/* --------------------------------------------------------------------
+   Ajustes de componentes de Bootstrap para que respeten el tema oscuro
+   -------------------------------------------------------------------- */
+.dropdown-menu {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-md);
+}
+
+.dropdown-item {
+  color: var(--color-text);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--color-surface-2);
+  color: var(--color-text);
+}
+
+.card {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.alert {
+  border-radius: var(--radius-sm);
+}
